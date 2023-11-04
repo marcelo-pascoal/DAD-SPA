@@ -1,47 +1,65 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref, onMounted } from 'vue'
+import axios from 'axios';
+import config from './utils/config.js'
+import VcardList from './components/admin/VcardList.vue'
+
+
+const vcards = ref([])
+
+const fetchCards = async () => {
+    const response = await axios.get(`${config.baseAPI}/vcards`)
+    vcards.value = response.data.data
+}
+
+const refresh = () => {
+  fetchCards()
+}
+
+onMounted(() => {
+  refresh()
+})
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div class="container">
+    <div class="d-flex">
+      <div class="flex-grow-1">
+        <h1 class="mt-3">Vcard list</h1>
+      </div>
+      <div class="flex-grow-0 d-flex flex-column justify-content-end">
+        <button type="button" class="btn btn-dark" @click="refresh">
+            <i class="bi-repeat" aria-hidden="true"></i> Refresh
+        </button>
+      </div>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <hr>
+    <div>
+      <VcardList :vcards="vcards" :readonly="false"></VcardList>
+    </div>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+<style>
+  .error {
+    font-size: small;
+    display: block;
+    color: red;
+    margin: 3px 0 5px 8px;
+    /* margin: -15px 0 6px 16px; */
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  span.error {
+    font-size: small;
+    display: block;
+    color: red;
   }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+  .errors {
+    font-size: small;
+    display: block;
+    color: red;
   }
-}
+
 </style>

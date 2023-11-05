@@ -1,5 +1,5 @@
 <script setup>
-import VcardComponent from './VcardComponent.vue'
+import Vcard from './Vcard.vue'
 
 const props = defineProps({
     vcards: Array,
@@ -23,11 +23,11 @@ const updateCard = (vcard) => {
 <template>
     <div>
         <ul class="list-group">
-            <VcardComponent v-for="vcard in vcards" :key="vcard.phone_number" 
+            <Vcard v-for="vcard in vcards" :key="vcard.phone_number" 
                 :vcard="vcard" 
                 :readonly="readonly" 
                 @requestRemoveFromList="handleRequestToRemoveCard"
-                @requestUpdateCard="updateCard"></VcardComponent>
+                @requestUpdateCard="updateCard"></Vcard>
         </ul>
     </div>
 </template>

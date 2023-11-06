@@ -50,8 +50,9 @@ const detailRequestedUpdateCard = (vcard) => {
                 <img alt="70x70" :src=" imageUrl || 'https://via.placeholder.com/70x70'" width="70" height="70">
             </a>
             <span id="fullDescription" :class="{ blocked: vcard.blocked }">{{ fullDescription }}</span>
+            <span id="balance" :class="{ blocked: vcard.blocked }">{{ props.vcard.balance }}€</span>
 
-            <div class="float-end" v-show="!readonly">
+            <div class="float-end adminBox" v-show="!readonly">
                 <button class="btn btn-secondary btn-xs" @click="toggleBlock(vcard)" v-if="vcard.blocked">
                     <i class="bi-ban" aria-hidden="true"></i>
                 </button>
@@ -72,6 +73,7 @@ const detailRequestedUpdateCard = (vcard) => {
             </div>
         </div>
         <div class="float-end" v-if="cardEdit"> 
+        <hr>
                 <VcardDetail :vcard="cardEdit" @requestUpdateCard="detailRequestedUpdateCard" @hide="closeEdit"></VcardDetail>
         </div>
     </li>
@@ -96,4 +98,21 @@ const detailRequestedUpdateCard = (vcard) => {
   flex: 1;
 }
 
+#balance {
+    width: 85px;
+    min-width: 85px;
+    margin: 10px;
+    padding: 10px;
+    text-align: right;
+    background-color: lightblue;
+}
+@media (max-width:770px){
+    #fullDescription {
+        width: 195px;
+        min-width: 195px;
+    }
+    .adminBox{
+        width: 33px;
+    }
+}
 </style>

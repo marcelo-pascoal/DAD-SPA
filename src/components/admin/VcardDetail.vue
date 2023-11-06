@@ -34,11 +34,19 @@ onMounted(() => {
         <div class="error" v-show="showErrors">Show error if necessary</div>
       </div>
 
+      <div class="me-3 flex-grow-1">
+        <div class="">
+          <label for="maxDebit" class="form-label mb-0 maxDebit">Max Debit</label>
+          <input type="text" class="form-control maxDebit" id="maxDebit" ref="maxDebit"
+                placeholder="Enter max Debit Value" v-model="editCard.max_debit">
+        </div>
+        <div class="error" v-show="showErrors">Show error if necessary</div>
+      </div>
       <div class="me-0">
-        <div class="d-flex flex-column">
-            <button type="submit" class="btn btn-primary" @click.prevent="save">
-                <i class="bi-check-lg" aria-hidden="true"></i> Save
-            </button>
+        <div class="d-flex flex-column submitBox">
+          <button type="submit" class="btn btn-primary" @click.prevent="save">
+              <i class="bi-check-lg" aria-hidden="true"></i> Save
+          </button>
           <button type="button" class="btn btn-secondary mt-2" @click="cancel">
                 <i class="bi-x-lg" aria-hidden="true"></i> Cancel
           </button>
@@ -46,3 +54,36 @@ onMounted(() => {
       </div>
     </form>
 </template>
+
+<style>
+.submitBox{
+  width: 120px;
+  margin-right: 2px;
+  margin-left: -6px;
+  
+}
+.maxDebit{
+    width: 90px;
+    text-align: center;
+}
+
+#maxDebit {
+    background-color: lightgoldenrodyellow;
+}
+
+@media (max-width:770px)
+{
+  .submitBox{
+  width:40px;
+  margin-right: -8px;
+  margin-left: -8px;
+  margin-top: 5px;
+  } 
+  .btn.btn-primary , .btn-secondary{
+  font-size: 0;
+  }
+  .btn.btn-primary i , .btn-secondary i{
+  font-size: 1rem;
+  }  
+}
+</style>

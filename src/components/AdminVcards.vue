@@ -1,6 +1,6 @@
 <script setup>
 import config from '../utils/config.js'
-import VcardList from './admin/VcardList.vue'
+import Vcard from './admin/Vcard.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios';
 
@@ -45,8 +45,14 @@ onMounted(() => {
             </div>
         </div>
         <hr>
-            <VcardList :vcards="vcards" :readonly="false" 
-                    @requestRemoveFromList="deleteCard" 
-                    @requestUpdateCard="updateCard"></VcardList>
+            <div>
+        <ul class="list-group">
+            <Vcard v-for="vcard in vcards" :key="vcard.phone_number" 
+                :vcard="vcard" 
+                @requestRemoveFromList="deleteCard"
+                @requestUpdateCard="updateCard"></Vcard>
+        </ul>
+    
     </div>
+</div>
 </template>

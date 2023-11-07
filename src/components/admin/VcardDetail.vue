@@ -56,12 +56,7 @@ onMounted(() => {
 </template>
 
 <style>
-.submitBox{
-  width: 120px;
-  margin-right: 2px;
-  margin-left: -6px;
-  
-}
+
 .maxDebit{
     width: 90px;
     text-align: center;
@@ -73,12 +68,6 @@ onMounted(() => {
 
 @media (max-width:770px)
 {
-  .submitBox{
-  width:40px;
-  margin-right: -8px;
-  margin-left: -8px;
-  margin-top: 5px;
-  } 
   .btn.btn-primary , .btn-secondary{
   font-size: 0;
   }

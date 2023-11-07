@@ -60,7 +60,11 @@ const detailRequestedUpdateCard = (vcard) => {
                     <i class="bi-check-lg" aria-hidden="true"></i>
                 </button>
 
-                <button class="btn btn-danger btn-xs" @click="clickToDeleteCard(vcard)">
+                <button class="btn btn-danger disabled btn-xs" v-if="vcard.balance>0">
+                    <i class="bi-trash" aria-hidden="true"></i>
+                </button>
+
+                <button class="btn btn-danger btn-xs" @click="clickToDeleteCard(vcard)" v-else>
                     <i class="bi-trash" aria-hidden="true"></i>
                 </button>
 
@@ -82,6 +86,7 @@ const detailRequestedUpdateCard = (vcard) => {
 <style scoped>
 .blocked {
     text-decoration: line-through;
+    background-color: lightgrey;
 }
 
 .card-container {
@@ -106,6 +111,12 @@ const detailRequestedUpdateCard = (vcard) => {
     text-align: right;
     background-color: lightblue;
 }
+
+button{
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
 @media (max-width:770px){
     #fullDescription {
         width: 195px;

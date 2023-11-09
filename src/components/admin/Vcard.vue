@@ -113,8 +113,7 @@ const detailRequestedUpdateCard = (vcard) => {
 }
 
 button{
-    margin-right: 5px;
-    margin-bottom: 5px;
+    margin: 2px;
 }
 
 @media (max-width:770px){

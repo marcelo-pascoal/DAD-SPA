@@ -1,6 +1,7 @@
 <script setup>
 import AdminVcards from './components/AdminVcards.vue';
 import AdminUsers from './components/AdminUsers.vue';
+import AdminCategories from './components/AdminCategories.vue';
 import { ref } from 'vue';
 
 const selectedComponent = ref(); // Initialize with the default component
@@ -15,6 +16,8 @@ const switchToComponent = (component) => {
     <div>
       <template v-if="selectedComponent === 'AdminVcards'">
         <div class="button-container">
+          <button @click="switchToComponent('AdminCategories')">AdminCategories</button>
+          &nbsp;
           <button @click="switchToComponent('AdminUsers')">AdminUsers</button>
           &nbsp;
           <button type="submit" class="btn btn-danger" @click="switchToComponent(null)">
@@ -24,9 +27,24 @@ const switchToComponent = (component) => {
         <AdminVcards />
       </template>
 
+      <template v-else-if="selectedComponent === 'AdminCategories'">
+        <div class="button-container">
+          <button @click="switchToComponent('AdminVcards')">AdminVcards</button> 
+          &nbsp;
+          <button @click="switchToComponent('AdminUsers')">AdminUsers</button>
+          &nbsp;
+          <button type="submit" class="btn btn-danger" @click="switchToComponent(null)">
+              <i class="bi-x-lg" aria-hidden="true"></i>
+          </button>
+        </div>
+        <AdminCategories />
+      </template>
+
       <template v-else-if="selectedComponent === 'AdminUsers'">
         <div class="button-container">
           <button @click="switchToComponent('AdminVcards')">AdminVcards</button> 
+          &nbsp;
+          <button @click="switchToComponent('AdminCategories')">AdminCategories</button>
           &nbsp;
           <button type="submit" class="btn btn-danger" @click="switchToComponent(null)">
               <i class="bi-x-lg" aria-hidden="true"></i>
@@ -38,6 +56,8 @@ const switchToComponent = (component) => {
       <template v-else>
         <div class="menu-container button-container">
           <button @click="switchToComponent('AdminVcards')">AdminVcards</button>
+          <br>
+          <button @click="switchToComponent('AdminCategories')">AdminCategories</button>
           <br>
           <button @click="switchToComponent('AdminUsers')">AdminUsers</button>
         </div>

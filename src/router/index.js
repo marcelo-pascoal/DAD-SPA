@@ -4,8 +4,13 @@ import HomeView from '../views/HomeView.vue'
 import Dashboard from "../components/Dashboard.vue"
 import Login from "../components/auth/Login.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
+//import Tasks from "../components/tasks/Tasks.vue"
+//import Projects from "../components/projects/Projects.vue"
 import User from "../components/users/User.vue"
 import Users from "../components/users/Users.vue"
+//import ProjectTasks from "../components/projects/ProjectTasks.vue"
+//import Task from "../components/tasks/Task.vue"
+//import Project from "../components/projects/Project.vue"
 
 let handlingFirstRoute = true
 
@@ -40,12 +45,56 @@ const router = createRouter({
       name: 'Dashboard',
       component: Dashboard
     },
-    
-
+    /*{
+      path: '/tasks',
+      name: 'Tasks',
+      component: Tasks,
+    },
+    {
+      path: '/tasks/current',
+      name: 'CurrentTasks',
+      component: Tasks,
+      props: { onlyCurrentTasks: true, tasksTitle: 'Current Tasks' }
+    },
+    {
+      path: '/tasks/new',
+      name: 'NewTask',
+      component: Task,
+      props: { id: -1 }
+    },
+    {
+      path: '/tasks/:id',
+      name: 'Task',
+      component: Task,
+      props: route => ({ id: parseInt(route.params.id) })
+    },
+    {
+      path: '/projects',
+      name: 'Projects',
+      component: Projects,
+    },
+    {
+      path: '/projects/new',
+      name: 'NewProject',
+      component: Project,
+      props: { id: -1 }
+    },
+    {
+      path: '/projects/:id',
+      name: 'Project',
+      component: Project,
+      props: route => ({ id: parseInt(route.params.id) })
+    },*/
     {
       path: '/users',
       name: 'Users',
       component: Users,
+    },
+    {
+      path: '/users/new',
+      name: 'NewUser',
+      component: User,
+      props: { id: -1 }
     },
     {
       path: '/users/:id',
@@ -54,8 +103,19 @@ const router = createRouter({
       //props: true
       // Replaced with the following line to ensure that id is a number
       props: route => ({ id: parseInt(route.params.id) })
-    }, 
-    
+    },
+    /*{
+      path: '/projects/:id/tasks',
+      name: 'ProjectTasks',
+      component: ProjectTasks,
+      props: route => ({ id: parseInt(route.params.id) })
+    },
+    {
+      path: '/projects/:id/tasks/new',
+      name: 'NewTaskOfProject',
+      component: Task,
+      props: route => ({ id:-1, fixedProject:  parseInt(route.params.id) })
+    },*/
     {
       path: '/reports',
       name: 'Reports',
@@ -64,13 +124,13 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(async (to, from, next) => {  
-  const userStore = useUserStore()  
+router.beforeEach(async (to, from, next) => {
+  const userStore = useUserStore()
   if (handlingFirstRoute) {
     handlingFirstRoute = false
     await userStore.restoreToken()
   }
-  if ((to.name == 'Login') || (to.name == 'home')) {
+  if ((to.name == 'Login') || (to.name == 'home') || (to.name == 'NewUser')) {
     next()
     return
   }

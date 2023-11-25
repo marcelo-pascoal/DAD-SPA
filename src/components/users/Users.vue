@@ -1,10 +1,12 @@
 <script setup>
 import axios from 'axios'
 import { useRouter } from 'vue-router'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, inject } from 'vue'
 import UserTable from "./UserTable.vue"
 
 const router = useRouter()
+
+const socket = inject('socket')
 
 const users = ref([])
 
@@ -29,6 +31,16 @@ const editUser = (user) => {
 onMounted (() => {
   loadUsers()
 })
+
+socket.on('insertedUser', () => {
+  loadUsers()
+})
+
+socket.on('updatedUser', () => {
+  loadUsers()
+})
+
+
 </script>
 
 <template>

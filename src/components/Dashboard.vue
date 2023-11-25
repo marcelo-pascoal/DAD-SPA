@@ -12,7 +12,6 @@ const switchToComponent = (component) => {
 </script>
 
 <template>
-  <div>
     <div>
       <template v-if="selectedComponent === 'AdminVcards'">
         <div class="button-container">
@@ -26,7 +25,6 @@ const switchToComponent = (component) => {
         </div>
         <AdminVcards />
       </template>
-
       <template v-else-if="selectedComponent === 'AdminCategories'">
         <div class="button-container">
           <button @click="switchToComponent('AdminVcards')">AdminVcards</button> 
@@ -39,7 +37,6 @@ const switchToComponent = (component) => {
         </div>
         <AdminCategories />
       </template>
-
       <template v-else-if="selectedComponent === 'AdminUsers'">
         <div class="button-container">
           <button @click="switchToComponent('AdminVcards')">AdminVcards</button> 
@@ -52,7 +49,6 @@ const switchToComponent = (component) => {
         </div>
         <AdminUsers />
       </template>
-
       <template v-else>
         <div class="menu-container button-container">
           <button @click="switchToComponent('AdminVcards')">AdminVcards</button>
@@ -62,13 +58,10 @@ const switchToComponent = (component) => {
           <button @click="switchToComponent('AdminUsers')">AdminUsers</button>
         </div>
       </template>
-
     </div>
-  </div>
 </template>
 
 <style>
-
 .button-container {
   display: flex;
   align-items: center; /* Center horizontally */
@@ -98,7 +91,6 @@ const switchToComponent = (component) => {
     color: red;
   }
 
-  
   .btn-close , .btn-secondary{
   font-size: 0;
   }
@@ -106,4 +98,3 @@ const switchToComponent = (component) => {
   font-size: 1rem;
   }  
 </style>
-  

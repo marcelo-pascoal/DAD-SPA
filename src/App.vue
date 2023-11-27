@@ -107,6 +107,29 @@ const clickMenuOption = () => {
               </router-link>
             </li>
             
+            <li class="nav-item" v-show="userStore.user?.user_type == 'A'">
+                <router-link class="nav-link" :class="{ active: $route.name === 'AdminVcards' }"
+                            :to="{ name: 'AdminVcards' }" @click="clickMenuOption">
+                  <i class="bi bi-list-stars"></i>
+                  Admin Vcards
+                </router-link>
+            </li>
+            <li class="nav-item" v-show="userStore.user?.user_type == 'A'">
+                <router-link class="nav-link" :class="{ active: $route.name === 'AdminUsers' }"
+                            :to="{ name: 'AdminUsers' }" @click="clickMenuOption">
+                  <i class="bi bi-list-stars"></i>
+                  Admin Users
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link class="nav-link" :class="{ active: $route.name === 'AdminCategories' }"
+                            :to="{ name: 'AdminCategories' }" @click="clickMenuOption">
+                  <i class="bi bi-list-stars"></i>
+                  Admin Categories
+                </router-link>
+            </li>
+
+
             <!-- 
             <li class="nav-item">
                 <router-link class="nav-link" :class="{ active: $route.name === 'CurrentTasks' }"

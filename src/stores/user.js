@@ -18,7 +18,7 @@ export const useUserStore = defineStore('user', () => {
 
     const userId = computed(() => user.value?.id ?? -1)
 
-    const userType = computed(() => user.value?.type ?? 'M')
+    const userType = computed(() => user.value?.type ?? 'V')
 
     const userPhotoUrl = computed(() =>
         user.value?.photo_url

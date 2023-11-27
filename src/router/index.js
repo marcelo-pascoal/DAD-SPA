@@ -11,6 +11,9 @@ import Users from "../components/users/Users.vue"
 //import ProjectTasks from "../components/projects/ProjectTasks.vue"
 //import Task from "../components/tasks/Task.vue"
 //import Project from "../components/projects/Project.vue"
+import AdminVcards from '../components/AdminVcards.vue'
+import AdminUsers from '../components/AdminUsers.vue'
+import AdminCategories from '../components/AdminCategories.vue'
 
 let handlingFirstRoute = true
 
@@ -44,6 +47,21 @@ const router = createRouter({
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard
+    },
+    {
+      path: '/admin/vcards',
+      name: 'AdminVcards',
+      component: AdminVcards
+    },
+    {
+      path: '/admin/users',
+      name: 'AdminUsers',
+      component: AdminUsers
+    },
+    {
+      path: '/admin/categories',
+      name: 'AdminCategories',
+      component: AdminCategories
     },
     /*{
       path: '/tasks',

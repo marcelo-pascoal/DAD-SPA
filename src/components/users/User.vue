@@ -33,7 +33,7 @@ const newUser = () => {
 const user = ref(newUser())
 const errors = ref(null)
 const confirmationLeaveDialog = ref(null)
-// String with the JSON representation after loading the project (new or edit)
+
 let originalValueStr = ''
 
 const inserting = (id) => !id || (id < 0)

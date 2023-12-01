@@ -23,8 +23,6 @@ const newUser = () => {
       id: null,
       name: '',
       email: '',
-      gender: 'M',
-      photo_url: null,
       password: '',
       password_confirmation: ''
     }
@@ -61,12 +59,7 @@ const save = async (userToSave) => {
       user.value = response.data.data
       originalValueStr = JSON.stringify(user.value)
       toast.success('User #' + user.value.id + ' was registered successfully.')
-      await userStore.login({
-        username: user.value.email,
-        password: userToSave.password
-      })
-      socket.emit('insertedUser', user.value)
-      router.push({name: 'Dashboard'})
+      router.push('/users')
     } catch (error) {
       if (error.response.status == 422) {
         errors.value = error.response.data.errors

@@ -24,6 +24,10 @@ const loadUsers = async () => {
   }
 }
 
+const addUser = () => {
+    router.push({ name: 'NewUser' })
+}
+
 const editUser = (user) => {
   router.push({ name: 'User', params: { id: user.id } })
 }
@@ -44,7 +48,20 @@ socket.on('updatedUser', () => {
 </script>
 
 <template>
-  <h3 class="mt-5 mb-3">Team Members</h3>
+  <h3 class="mt-5 mb-3">Administrators</h3>
+
+  <div class="mb-3 d-flex justify-content-between flex-wrap">
+  <div class="mx-2 mt-2 flex-grow-1 total-filtro">
+    <h5 class="mt-4">Total: {{ totalUsers }}</h5>
+  </div>
+  <div class="mx-2 mt-2">
+      <button
+        type="button"
+        class="btn btn-success px-4 btn-addprj"
+        @click="addUser"
+      ><i class="bi bi-xs bi-plus-circle"></i>&nbsp; Add Administrator</button>
+  </div>
+</div>
   <hr>
   <user-table
     :users="users"

@@ -2,7 +2,6 @@ import axios from 'axios'
 import { ref, computed, inject } from 'vue'
 import { defineStore } from 'pinia'
 import avatarNoneUrl from '@/assets/avatar-none.png'
-//import { useProjectsStore } from "./projects.js"
 import { useToast } from "vue-toastification"
 
 export const useUserStore = defineStore('user', () => {
@@ -10,7 +9,6 @@ export const useUserStore = defineStore('user', () => {
     const toast = useToast()
 
     const serverBaseUrl = inject('serverBaseUrl')
-    //const projectsStore = useProjectsStore()
 
     const user = ref(null)
 
@@ -20,7 +18,7 @@ export const useUserStore = defineStore('user', () => {
 
     const userType = computed(() => user.value?.type ?? 'V')
 
-    const userPhotoUrl = computed(() =>
+    const userPhotoUrl = computed(() => 
         user.value?.photo_url
         ? serverBaseUrl + '/storage/fotos/' + user.value.photo_url
         : avatarNoneUrl)
@@ -37,21 +35,18 @@ export const useUserStore = defineStore('user', () => {
 
     function clearUser() {
         delete axios.defaults.headers.common.Authorization
-        //projectsStore.clearProjects()
         sessionStorage.removeItem('token')
         user.value = null
     }
 
     async function login(credentials) {
         try {
-            console.log(credentials)
             const response = await axios.post('login', credentials)
            
             axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
             sessionStorage.setItem('token', response.data.access_token)
             await loadUser()
             socket.emit('loggedIn', user.value)
-            //await projectsStore.loadProjects()
             return true
         }
         catch(error) {
@@ -89,7 +84,6 @@ export const useUserStore = defineStore('user', () => {
             axios.defaults.headers.common.Authorization = "Bearer " + storedToken
             await loadUser()
             socket.emit('loggedIn', user.value)
-            //await projectsStore.loadProjects()
             return true
         }
         clearUser()

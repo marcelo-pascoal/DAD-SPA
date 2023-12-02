@@ -43,7 +43,7 @@
 
   const deleteUserConfirmed = async () => {
     try {
-      await axios.delete(`/users/${userToDelete.value.id}`);
+      await axios.delete(`/users/${userToDelete.value.id}`)
       toast.info(`Project ${userToDeleteDescription.value} was deleted`)
       loadUsers()
     } catch (error) {

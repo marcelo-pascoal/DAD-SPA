@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { ref, computed, provide, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import CategoryList from './CategoryList.vue'
 import NewCategory from './NewCategory.vue'
 
@@ -15,7 +15,7 @@ const addCategory = async (newCategory) => {
 }
 
 const deleteCategory = async (category) => {
-  const response = await axios.delete('/categories/' + category.id)         
+  const response = await axios.delete(`/categories/${category.id}`);        
   const deletedCategory = response.data.data
   const idx = categories.value.findIndex((element) => element.id === deletedCategory.id)
   if (idx >= 0) {
@@ -24,8 +24,9 @@ const deleteCategory = async (category) => {
 }
 
 const updateCategory = async (category) => {
-  const response = await axios.put('/categories/' + category.id, category)         
-  const savedCategory = response.data.data
+  
+  const response = await axios.put('/categories/' + category.id, category)  
+  const savedCategory = response.data.data   
   
   let idx = categories.value.findIndex((t) => t.id === savedCategory.id)
   if (idx >= 0) {

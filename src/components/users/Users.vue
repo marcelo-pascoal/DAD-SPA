@@ -1,14 +1,20 @@
 <script setup>
 import axios from 'axios'
+import { useToast } from "vue-toastification"
 import { useRouter } from 'vue-router'
 import { ref, computed, onMounted, inject } from 'vue'
 import UserTable from "./UserTable.vue"
 
+const toast = useToast()
 const router = useRouter()
 
 const socket = inject('socket')
 
 const users = ref([])
+
+
+const userToDelete = ref(null)
+const deleteConfirmationDialog = ref(null)
 
 const totalUsers = computed(() => {
   return users.value.length
@@ -32,6 +38,26 @@ const editUser = (user) => {
   router.push({ name: 'User', params: { id: user.id } })
 }
 
+const deleteUser = (user) => {
+  userToDelete.value = user
+  deleteConfirmationDialog.value.show()
+}
+
+const deleteUserConfirmed = async () => {
+  try {
+    await axios.delete(`/users/${userToDelete.value.id}`);
+    toast.info(`Project ${userToDeleteDescription.value} was deleted`)
+    loadUsers()
+  } catch (error) {
+    console.log(error)
+    toast.error(`It was not possible to delete Administrator ${userToDeleteDescription.value}!`)
+  }  
+}
+
+const userToDeleteDescription = computed(() => userToDelete.value
+    ? `#${userToDelete.value.id} (${userToDelete.value.name})`
+    : "")
+
 onMounted (() => {
   loadUsers()
 })
@@ -48,6 +74,13 @@ socket.on('updatedUser', () => {
 </script>
 
 <template>
+  <confirmation-dialog
+    ref="deleteConfirmationDialog"
+    confirmationBtn="Delete administrator"
+    :msg="`Do you really want to delete the administrator ${userToDeleteDescription}?`"
+    @confirmed="deleteUserConfirmed"
+  >
+  </confirmation-dialog>
   <h3 class="mt-5 mb-3">Administrators</h3>
 
   <div class="mb-3 d-flex justify-content-between flex-wrap">
@@ -67,6 +100,7 @@ socket.on('updatedUser', () => {
     :users="users"
     :showId="false"
     @edit="editUser"
+    @delete="deleteUser"
   ></user-table>
 </template>
 

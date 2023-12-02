@@ -72,7 +72,7 @@ const canViewUserDetail = (userId) => {
             </div>
             <button
               class="btn btn-xs btn-light"
-              @click="deleteClick(project)"
+              @click="deleteClick(user)"
               v-if="showDeleteButton"
             ><i class="bi bi-xs bi-x-square-fill"></i>
             </button>

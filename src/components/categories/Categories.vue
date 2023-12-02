@@ -1,51 +1,98 @@
 <script setup>
 import axios from 'axios'
-import { ref, onMounted } from 'vue'
+import { useToast } from "vue-toastification"
+import { ref, computed, onMounted } from 'vue'
 import CategoryList from './CategoryList.vue'
 import NewCategory from './NewCategory.vue'
+import { useCategoriesStore } from "../../stores/categories.js"
 
+const toast = useToast()
+
+const filterByName = ref('')
+const filterByType = ref('')
+
+const newCategory = () => { 
+  return {
+    id: null,
+    type: '',
+    name: '',
+  }
+}
 const categories = ref([])
+const category = ref(newCategory())
+const categoriesStore = useCategoriesStore()
+const errors = ref(null)
+const categoryToDelete = ref(null)
+const deleteConfirmationDialog = ref(null)
+
+const loadCategories = async () => {
+  try {
+    await categoriesStore.loadCategories()
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 const addCategory = async (newCategory) => {
+  errors.value = null
   if (newCategory) {
-    const response = await axios.post('/categories', newCategory)         
-    const savedCategory = response.data.data
-    categories.value.push(savedCategory)
+    try {
+      category.value = await categoriesStore.insertCategory(category.value)
+      toast.success('Project #' + project.value.id + ' was created successfully.')
+    }catch (error) {
+      if (error.response.status == 422) {
+        errors.value = error.response.data.errors
+        toast.error('Category was not created due to validation errors!')
+      } else {
+        toast.error('Category was not created due to unknown server error!')
+      }
+    }
   }
 }
 
 const deleteCategory = async (category) => {
-  const response = await axios.delete(`/categories/${category.id}`);        
-  const deletedCategory = response.data.data
-  const idx = categories.value.findIndex((element) => element.id === deletedCategory.id)
-  if (idx >= 0) {
-    categories.value.splice(idx, 1)
-  }
+  categoryToDelete.value = category
+  deleteConfirmationDialog.value.show()
 }
+
+const deleteCategoryConfirmed = async () => {
+  try {
+    await categoriesStore.deleteCategory(categoryToDelete.value)
+    toast.info(`Category ${categoryToDeleteDescription.value} was deleted`)
+  } catch (error) {
+    console.log(error)
+    toast.error(`It was not possible to delete Category ${categoryToDeleteDescription.value}!`)
+  }  
+}
+
+const categoryToDeleteDescription = computed(() => categoryToDelete.value
+    ? `#${categoryToDelete.value.id} (${categoryToDelete.value.name})`
+    : "")
+
+const filteredCategories = computed(() =>
+  categoriesStore.getCategoriesByFilter(filterByType.value, filterByName.value)
+)
+
+const totalCategories = computed(() =>
+  categoriesStore.getCategoriesByFilterTotal(filterByType.value, filterByName.value)
+) 
 
 const updateCategory = async (category) => {
-  
-  const response = await axios.put('/categories/' + category.id, category)  
-  const savedCategory = response.data.data   
-  
-  let idx = categories.value.findIndex((t) => t.id === savedCategory.id)
-  if (idx >= 0) {
-    categories.value[idx] = savedCategory
-  }
-}
-
-const fetchCategories = async () => {
-  const response = await axios.get("/categories")
-  categories.value = response.data.data
+  try {
+    await categoriesStore.updateCategory(category.value)
+    toast.info(`Category ${categoryToDeleteDescription.value} was updated`)
+  } catch (error) {
+    console.log(error)
+    toast.error(`It was not possible to update Category ${category.value}!`)
+  }  
 }
 
 const refresh = async () => {
-  const promiseCategories = fetchCategories()
-  await promiseCategories
+  loadCategories()
 }
 
 onMounted(async () => {
-  await refresh()
+  loadCategories()
 })
 
 </script>
@@ -67,7 +114,7 @@ onMounted(async () => {
       <hr>
       <NewCategory @add="addCategory"></NewCategory>
       <h3>Categories</h3>
-      <CategoryList :categories="categories" :readonly="false" 
+      <CategoryList :categories="filteredCategories" :readonly="false" 
           @delete="deleteCategory"
           @update="updateCategory">
         </CategoryList>

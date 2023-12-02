@@ -2,7 +2,10 @@
 import Category from './Category.vue'
 
 const props = defineProps({
-    categories: Array
+    categories: {
+      type: Array,
+      default: () => [],
+    },
 })
 
 const emit = defineEmits([

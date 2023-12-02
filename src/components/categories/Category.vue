@@ -35,6 +35,10 @@ const updateCategory = (category) => {
 
 <template>
     <li class="list-group-item">
+        <button class="btn btn-xs btn-light" disabled>
+              <i class="bi bi-xs bi-cash" v-if="category.type === 'C'" ></i>
+              <i class="bi bi-xs bi-cart3" v-else ></i>
+        </button>
         <span>{{ category.name }}</span>
         <div class="float-end">
             <button class="btn btn-danger btn-xs" @click="deleteCategory(category)">
@@ -54,7 +58,6 @@ const updateCategory = (category) => {
         </div>
     </li>
 </template>
-
 
 <style scoped>
 

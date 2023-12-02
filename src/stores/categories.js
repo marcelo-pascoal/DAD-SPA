@@ -31,7 +31,7 @@ export const useCategoriesStore = defineStore('categories', () => {
     function getCategoriesByFilter(type, name) {
         return categories.value.filter( cat =>
             (!type || type == cat.type ) &&
-            (!name || name in cat.name )
+            (!name || cat.name.includes(name))
         )
     }
 
@@ -74,6 +74,7 @@ export const useCategoriesStore = defineStore('categories', () => {
     }
 
     async function updateCategory(updateCategory) {
+        console.log(updateCategory)
         const response = await axios.put('categories/' + updateCategory.id, updateCategory)
         updateCategoryOnArray(response.data.data)
         socket.emit('updateCategory', response.data.data)
@@ -88,7 +89,7 @@ export const useCategoriesStore = defineStore('categories', () => {
     }
 
     async function deleteCategory( deleteCategory) {
-        const response = await axios.delete('categoies/' + deleteCategory.id)
+        const response = await axios.delete('categories/' + deleteCategory.id)
         deleteCategoryOnArray(response.data.data)
         socket.emit('deleteCategory', response.data.data)
         return response.data.data

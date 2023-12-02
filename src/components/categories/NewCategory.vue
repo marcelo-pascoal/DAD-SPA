@@ -31,17 +31,17 @@ onMounted(() => {
 
 <template>
     <form action="#">
-        <div>New Category</div>
+        <h3>New Category</h3>
         <div>
-            <div>
-                <div >
+            <div class="d-flex flex-wrap justify-content-between">
+                <div class="mb-3 me-3 ">
                     <label for="newCategoryType">Type:</label>
                     <select class="form-select" v-model="newCategoryType">
                         <option value="D">Debit</option>
                         <option value="C">Credit</option>
                     </select>
                 </div>
-                <div>
+                <div class="flex-grow-1">
                     <label for="newCategory">Name:</label>
                     <input ref="categoryinput" type="text" class="form-control" placeholder="Enter the new category's name"
                         aria-label="Enter the new category's name" aria-describedby="button-new-category" v-model="newCategory">

@@ -18,7 +18,7 @@ const newCategory = () => {
     name: '',
   }
 }
-const categories = ref([])
+
 const category = ref(newCategory())
 const categoriesStore = useCategoriesStore()
 const errors = ref(null)
@@ -37,8 +37,8 @@ const addCategory = async (newCategory) => {
   errors.value = null
   if (newCategory) {
     try {
-      category.value = await categoriesStore.insertCategory(category.value)
-      toast.success('Project #' + project.value.id + ' was created successfully.')
+      category.value = await categoriesStore.insertCategory(newCategory)
+      toast.success('Category #' + category.value.id + ' was created successfully.')
     }catch (error) {
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
@@ -79,7 +79,7 @@ const totalCategories = computed(() =>
 
 const updateCategory = async (category) => {
   try {
-    await categoriesStore.updateCategory(category.value)
+    await categoriesStore.updateCategory(category)
     toast.info(`Category ${categoryToDeleteDescription.value} was updated`)
   } catch (error) {
     console.log(error)
@@ -98,10 +98,20 @@ onMounted(async () => {
 </script>
 
 <template>
+  <confirmation-dialog
+    ref="deleteConfirmationDialog"
+    confirmationBtn="Delete category"
+    :msg="`Do you really want to delete the category ${categoryToDeleteDescription}?`"
+    @confirmed="deleteCategoryConfirmed"
+  >
+  </confirmation-dialog>
+
   <div class="container">
+    <h1>Categories</h1>
+    <NewCategory @add="addCategory"></NewCategory>
     <div class="d-flex">
       <div class="flex-grow-1">
-        <h1 class="mt-3">Category List</h1>
+        <h3 class="mt-3">Category List</h3>
       </div>
       <div class="flex-grow-0 d-flex flex-column justify-content-end">
         <button type="button" class="btn btn-dark" @click="refresh">
@@ -110,10 +120,22 @@ onMounted(async () => {
       </div>
     </div>
     <hr>
+    <div class="d-flex flex-wrap justify-content-between">
+      <div class="mb-3 me-3 flex-grow-1">
+        <label for="selectName" class="form-label" >Filter by name:</label>
+        <input ref="categoryinput" type="text" class="form-control" v-model="filterByName">
+      </div>
+      <div class="mb-3 ms-xs-3 flex-grow-1">
+        <label for="selectType" class="form-label">Filter by type:</label>
+        <select class="form-select" id="selectType" v-model="filterByType">
+          <option :value="null"></option>
+          <option value="C">Credit</option>
+          <option value="D">Debit</option>
+        </select>
+      </div>
+    </div>
     <div>
       <hr>
-      <NewCategory @add="addCategory"></NewCategory>
-      <h3>Categories</h3>
       <CategoryList :categories="filteredCategories" :readonly="false" 
           @delete="deleteCategory"
           @update="updateCategory">

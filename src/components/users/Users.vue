@@ -1,76 +1,72 @@
 <script setup>
-import axios from 'axios'
-import { useToast } from "vue-toastification"
-import { useRouter } from 'vue-router'
-import { ref, computed, onMounted, inject } from 'vue'
-import UserTable from "./UserTable.vue"
+  import axios from 'axios'
+  import { useToast } from "vue-toastification"
+  import { useRouter } from 'vue-router'
+  import { ref, computed, onMounted, inject } from 'vue'
+  import UserTable from "./UserTable.vue"
 
-const toast = useToast()
-const router = useRouter()
+  const toast = useToast()
+  const router = useRouter()
+  const socket = inject('socket')
 
-const socket = inject('socket')
+  const userToDelete = ref(null)
+  const deleteConfirmationDialog = ref(null)
 
-const users = ref([])
+  const users = ref([])
 
+  const totalUsers = computed(() => {
+    return users.value.length
+  })
 
-const userToDelete = ref(null)
-const deleteConfirmationDialog = ref(null)
+  const loadUsers = async () => {
+      try {
+        const response = await axios.get('users')
+      users.value = response.data.data
 
-const totalUsers = computed(() => {
-  return users.value.length
-})
-
-const loadUsers = async () => {
-    try {
-      const response = await axios.get('users')
-    users.value = response.data.data
-
-  } catch (error) {
-    console.log(error)
+    } catch (error) {
+      console.log(error)
+    }
   }
-}
 
-const addUser = () => {
-    router.push({ name: 'NewUser' })
-}
+  const addUser = () => {
+      router.push({ name: 'NewUser' })
+  }
 
-const editUser = (user) => {
-  router.push({ name: 'User', params: { id: user.id } })
-}
+  const editUser = (user) => {
+    router.push({ name: 'User', params: { id: user.id } })
+  }
 
-const deleteUser = (user) => {
-  userToDelete.value = user
-  deleteConfirmationDialog.value.show()
-}
+  const deleteUser = (user) => {
+    userToDelete.value = user
+    deleteConfirmationDialog.value.show()
+  }
 
-const deleteUserConfirmed = async () => {
-  try {
-    await axios.delete(`/users/${userToDelete.value.id}`);
-    toast.info(`Project ${userToDeleteDescription.value} was deleted`)
+  const deleteUserConfirmed = async () => {
+    try {
+      await axios.delete(`/users/${userToDelete.value.id}`);
+      toast.info(`Project ${userToDeleteDescription.value} was deleted`)
+      loadUsers()
+    } catch (error) {
+      console.log(error)
+      toast.error(`It was not possible to delete Administrator ${userToDeleteDescription.value}!`)
+    }  
+  }
+
+  const userToDeleteDescription = computed(() => userToDelete.value
+      ? `#${userToDelete.value.id} (${userToDelete.value.name})`
+      : "")
+
+  onMounted (() => {
     loadUsers()
-  } catch (error) {
-    console.log(error)
-    toast.error(`It was not possible to delete Administrator ${userToDeleteDescription.value}!`)
-  }  
-}
+  })
 
-const userToDeleteDescription = computed(() => userToDelete.value
-    ? `#${userToDelete.value.id} (${userToDelete.value.name})`
-    : "")
+  socket.on('insertedUser', () => {
+    loadUsers()
+  })
 
-onMounted (() => {
-  loadUsers()
-})
-
-socket.on('insertedUser', () => {
-  loadUsers()
-})
-
-socket.on('updatedUser', () => {
-  loadUsers()
-})
-
-
+  socket.on('updatedUser', () => {
+    loadUsers()
+  })
 </script>
 
 <template>

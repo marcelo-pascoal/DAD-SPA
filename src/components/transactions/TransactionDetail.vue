@@ -1,10 +1,11 @@
 <script setup>
-  import { ref, watch, computed } from 'vue'
+  import { ref, watch, computed, onMounted } from 'vue'
   import { useCategoriesStore } from "../../stores/categories.js"
 
   import { useUserStore } from "../../stores/user.js"
 
   const categoriesStore = useCategoriesStore()
+  categoriesStore.loadCategories()
   const userStore = useUserStore()
   
   const props = defineProps({
@@ -32,10 +33,11 @@
   )
 
   const transactionTitle = computed(()=>{
+    let method = editingTransaction.value.type === 'C' ? 'Credit' : 'Debit'
     if (!editingTransaction.value) {
         return ''
       }
-      return props.operationType == 'insert' ? 'New Transaction' : 'Transaction #' + editingTransaction.value.id
+      return props.operationType == 'insert' ? 'New ' + method + ' Transaction' : method + ' Transaction #' + editingTransaction.value.id
   })
 
   const save = () => {
@@ -46,6 +48,40 @@
       emit('cancel', editingTransaction.value)
   }
 
+  const isValidReference = computed(()=>{
+    if(editingTransaction.value.value>=0.01){
+      const reference = editingTransaction.value.payment_reference;
+
+      switch (editingTransaction.value.payment_type) {
+        case "VCARD":
+          return /^90\d{7}$/.test(reference);
+        case "MBWAY":
+          return /^90\d{7}$/.test(reference);
+        case "PAYPAL":
+          return /^xx/.test(reference) && /\S+@\S+\.\S+/.test(reference);
+        case "IBAN":
+          return /^XX/.test(reference);
+        case "MB": 
+          return /^9\d+/.test(reference);
+        case "VISA":
+          return /^40\d+/.test(reference);
+      }
+    }
+    return false
+  })
+
+  const submitTransaction = () => {
+    console.log(editingTransaction.value)
+  }
+
+  onMounted(async () => {
+    if(!editingTransaction.value && userStore.userType == 'A' || editingTransaction.value.type == 'C'){
+        editingTransaction.value.type = 'C'
+      }
+      else{
+        editingTransaction.value.type = 'D'
+      }
+  })
 </script>
 
 <template>
@@ -58,14 +94,48 @@
     <hr>
 
     <div class="d-flex flex-wrap justify-content-between">
+      <div class="mb-3 me-3 flex-grow-1">
+        <label for="inputMethod" class="form-label">Destination</label>
+        <select class="form-select" 
+        :class="{ 'is-invalid': errors ? errors['payment_type'] : false }"
+          id="inputMethod" v-model="editingTransaction.payment_type">
+          <option value="VCARD">vCard</option>
+          <option value="MBWAY">MBWAY</option>
+          <option value="PAYPAL">PayPal</option>
+          <option value="IBAN">Transfer</option>
+          <option value="MB">Multibanco</option>
+          <option value="VISA">VISA</option>
+        </select>
+        <field-error-message :errors="errors" fieldName="status"></field-error-message>
+      </div>
       <div class="mb-3 ms-xs-3 flex-grow-1">
-        <label for="inputType" class="form-label" >Type</label>
-        <div>
-          <button class="btn btn-xs btn-light" disabled>
-                <i class="bi bi-xs bi-cash" v-if="!editingTransaction.value && userStore.userType === 'A' || editingTransaction.value === 'C'" ></i>
-                <i class="bi bi-xs bi-cart3" v-else></i>
-          </button>
-        </div>
+        <label for="inputReference" class="form-label">Reference</label>
+        <input type="text" class="form-control" :class="{ 'is-invalid': errors ? errors['payment_reference'] : false }"
+          id="inputReference" placeholder="Destination Reference" required
+          v-model="editingTransaction.payment_reference">
+        <field-error-message :errors="errors" fieldName="reference"></field-error-message>
+      </div>
+    </div>
+    <div class="d-flex flex-wrap justify-content-between">
+      <div class="mb-3 me-3 flex-grow-1">
+        <label
+          for="inputCategory"
+          class="form-label"
+        >Category</label>
+        <select
+          class="form-select pe-2"
+          :class="{ 'is-invalid': errors ? errors['category'] : false }"
+          id="inputCategory"
+          v-model="editingTransaction.category_id"
+        >
+          <option :value="null">-- No Category --</option>
+          <option 
+            v-for="category in categoriesStore.categories.filter(category => category.type == editingTransaction.type)"
+            :key="category.id"
+            :value="category.id"
+          >{{category.name}}</option>
+        </select>
+        <field-error-message :errors="errors" fieldName="responsible_id"></field-error-message>
       </div>
       <div class="mb-3 me-3 flex-grow-1">
         <label for="inputValue" class="form-label">Value</label>
@@ -74,9 +144,26 @@
         <field-error-message :errors="errors" fieldName="value"></field-error-message>
       </div>
     </div>
-
+    
+    <div class="mb-3">
+      <label
+        for="inputDescription"
+        class="form-label"
+      >Description</label>
+      <textarea rows="5" class="form-control" :class="{ 'is-invalid': errors ? errors['description'] : false }"
+        id="inputDescription" placeholder="Description" v-model="editingTransaction.description">
+      </textarea>
+      <field-error-message :errors="errors" fieldName="description"></field-error-message>
+    </div>
+    
+    <div class="d-flex mx-2 mt-2 justify-content-end">
+      <button :disabled="!isValidReference" type="button"  class="btn btn-success px-4 btn-addtr" @click="submitTransaction">
+        <i class="bi bi-xs bi-plus-circle"></i>&nbsp; Submit Transaction
+      </button>
+    </div>
   </form>
 </template>
+
 
 <style scoped>
 .total_price {

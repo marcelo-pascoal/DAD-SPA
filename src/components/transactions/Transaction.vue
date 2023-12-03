@@ -5,7 +5,7 @@ import { useUserStore } from "../../stores/user.js"
 import { useTransactionsStore } from "../../stores/transactions.js"
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
-import { ref, watch, computed, onMounted} from 'vue'
+import { ref, watch, computed} from 'vue'
 import TransactionDetail from "./TransactionDetail.vue"
 
 const toast = useToast()
@@ -16,7 +16,7 @@ const transactionsStore = useTransactionsStore()
 const newTransaction = () => { 
   return {
     id: null,
-    vcard: userStore.userId,
+    vcard: null,
     date: null,
     datetime: null,
     type: null,

@@ -15,18 +15,10 @@ const transactionsStore = useTransactionsStore()
 
 const newTransaction = () => { 
   return {
-    id: null,
-    vcard: null,
-    date: null,
-    datetime: null,
     type: null,
     value: null,
-    old_balance: null,
-    new_balance:null,
     payment_type:null,
     payment_reference:null,
-    pair_transaction:null,
-    pair_card:null,
     category_id:null,
     description:'',
   }

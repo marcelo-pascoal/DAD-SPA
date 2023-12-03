@@ -70,10 +70,6 @@
     return false
   })
 
-  const submitTransaction = () => {
-    console.log(editingTransaction.value)
-  }
-
   onMounted(async () => {
     if(!editingTransaction.value && userStore.userType == 'A' || editingTransaction.value.type == 'C'){
         editingTransaction.value.type = 'C'
@@ -155,11 +151,17 @@
       </textarea>
       <field-error-message :errors="errors" fieldName="description"></field-error-message>
     </div>
-    
-    <div class="d-flex mx-2 mt-2 justify-content-end">
-      <button :disabled="!isValidReference" type="button"  class="btn btn-success px-4 btn-addtr" @click="submitTransaction">
-        <i class="bi bi-xs bi-plus-circle"></i>&nbsp; Submit Transaction
-      </button>
+    <div class="mb-3 d-flex justify-content-end">
+      <button :disabled="!isValidReference"
+        type="button"
+        class="btn btn-primary px-5"
+        @click="save"
+      >Save</button>
+      <button
+        type="button"
+        class="btn btn-light px-5"
+        @click="cancel"
+      >Cancel</button>
     </div>
   </form>
 </template>

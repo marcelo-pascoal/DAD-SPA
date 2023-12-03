@@ -54,9 +54,9 @@
 
       switch (editingTransaction.value.payment_type) {
         case "VCARD":
-          return /^90\d{7}$/.test(reference);
+          return /^9\d{8}$/.test(reference);
         case "MBWAY":
-          return /^90\d{7}$/.test(reference);
+          return /^9\d{8}$/.test(reference);
         case "PAYPAL":
           return /^xx/.test(reference) && /\S+@\S+\.\S+/.test(reference);
         case "IBAN":

@@ -32,8 +32,7 @@ const newTransaction = () => {
   }
 }
 
-const transaction = ref(newTranscation())
-const users = ref([])
+const transaction = ref(newTransaction())
 const errors = ref(null)
 const confirmationLeaveDialog = ref(null)
 
@@ -133,32 +132,16 @@ onBeforeRouteLeave((to, from, next) => {
     next()
   }
 }) 
-
-onMounted(async () => {
-  /*users.value = []
-  try {
-    const response = await axios.get('users')
-    users.value = response.data.data
-  } catch (error) {
-    console.log(error)
-  }*/
-})
 </script>
 
-
 <template>
-    <confirmation-dialog
-      ref="confirmationLeaveDialog"
-      confirmationBtn="Discard changes and leave"
-      msg="Do you really want to leave? You have unsaved changes!"
-      @confirmed="leaveConfirmed"
-    >
-    </confirmation-dialog>    
-  <TransactionDetail
-    :operationType="operation"
-    :transaction="transaction"
-    :errors="errors"
-    @save="save"
-    @cancel="cancel"
-  ></TransactionDetail>
+  <confirmation-dialog
+    ref="confirmationLeaveDialog"
+    confirmationBtn="Discard changes and leave"
+    msg="Do you really want to leave? You have unsaved changes!"
+    @confirmed="leaveConfirmed">
+  </confirmation-dialog>
+  <TransactionDetail :operationType="operation" :transaction="transaction"
+    :errors="errors" @save="save" @cancel="cancel">
+  </TransactionDetail>
 </template>

@@ -123,15 +123,15 @@ const clickMenuOption = () => {
                 </router-link>
             </li>
             <li class="nav-item" v-show="userStore.user?.user_type == 'V'">
-                <router-link class="nav-link" :class="{ active: $route.name === 'AdminTransactions' }"
-                            :to="{ name: 'AdminTransactions' }" @click="clickMenuOption">
+                <router-link class="nav-link" :class="{ active: $route.name === 'Transactions' }"
+                            :to="{ name: 'Transactions' }" @click="clickMenuOption">
                   <i class="bi bi-list-stars"></i>
                   transactions
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link class="nav-link" :class="{ active: $route.name === 'AdminCategories' }"
-                            :to="{ name: 'AdminCategories' }" @click="clickMenuOption">
+                <router-link class="nav-link" :class="{ active: $route.name === 'Categories' }"
+                            :to="{ name: 'Categories' }" @click="clickMenuOption">
                   <i class="bi bi-list-stars"></i>
                   Categories
                 </router-link>

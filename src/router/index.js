@@ -6,8 +6,9 @@ import Login from "../components/auth/Login.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
 import User from "../components/users/User.vue"
 import Users from "../components/users/Users.vue"
-import AdminVcards from '../components/AdminVcards.vue'
+import Vcards from '../components/vcards/Vcards.vue'
 import Transactions from '../components/transactions/Transactions.vue'
+import Transaction from  '../components/transactions/Transaction.vue'
 
 import Categories from '../components/categories/Categories.vue'
 
@@ -47,18 +48,25 @@ const router = createRouter({
     {
       path: '/vcards',
       name: 'AdminVcards',
-      component: AdminVcards
+      component: Vcards
     },
     {
       path: '/categories',
-      name: 'AdminCategories',
+      name: 'Categories',
       component: Categories
     },
     {
       path: '/transactions',
-      name: 'AdminTransactions',
+      name: 'Transactions',
       component: Transactions
-    },{
+    },
+    {
+      path: '/transactions/new',
+      name: 'NewTransaction',
+      component: Transaction,
+      props: { id: -1 }
+    },
+    {
       path: '/users',
       name: 'Users',
       component: Users,

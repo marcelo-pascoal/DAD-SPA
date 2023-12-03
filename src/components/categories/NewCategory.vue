@@ -33,22 +33,25 @@ onMounted(() => {
     <form action="#">
         <h3>New Category</h3>
         <div>
-            <div class="d-flex flex-wrap justify-content-between">
-                <div class="mb-3 me-3 ">
-                    <label for="newCategoryType">Type:</label>
+            <div class="d-flex flex-wrap justify-content-between justify-content-end align-items-end">
+                <div class="mx-1 mt-1 ">
+                    <label for="3">Type:</label>
                     <select class="form-select" v-model="newCategoryType">
                         <option value="D">Debit</option>
                         <option value="C">Credit</option>
                     </select>
                 </div>
-                <div class="flex-grow-1">
+                <div class="mx-1 mt-1 flex-grow-1">
                     <label for="newCategory">Name:</label>
-                    <input ref="categoryinput" type="text" class="form-control" placeholder="Enter the new category's name"
-                        aria-label="Enter the new category's name" aria-describedby="button-new-category" v-model="newCategory">
+                    <input ref="categoryinput" type="text" class="form-control" 
+                        placeholder="Enter the new category's name" aria-label="Enter the new category's name" 
+                        aria-describedby="button-new-category" v-model="newCategory">
                 </div>
-                <button id="button-new-category" type="submit" class="btn btn-primary" @click.prevent="addCategory">
-                    <i class="bi-plus-lg" aria-hidden="true"></i>
-                </button>
+                <div class="mx-1 mt-1 ">
+                    <button id="button-new-category" type="button" class="btn btn-success px-4 btn-addtr"
+                        @click.prevent="addCategory"><i class="bi bi-xs bi-plus-circle"></i>&nbsp; Add Category
+                    </button>
+                </div>
             </div>
             <div class="error" v-show="showErrors">Show error if necessary</div>
         </div>

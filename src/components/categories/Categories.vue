@@ -1,5 +1,4 @@
 <script setup>
-import axios from 'axios'
 import { useToast } from "vue-toastification"
 import { ref, computed, onMounted } from 'vue'
 import CategoryList from './CategoryList.vue'
@@ -102,8 +101,7 @@ onMounted(async () => {
     ref="deleteConfirmationDialog"
     confirmationBtn="Delete category"
     :msg="`Do you really want to delete the category ${categoryToDeleteDescription}?`"
-    @confirmed="deleteCategoryConfirmed"
-  >
+    @confirmed="deleteCategoryConfirmed">
   </confirmation-dialog>
 
   <div class="container">
@@ -137,8 +135,7 @@ onMounted(async () => {
     <div>
       <hr>
       <CategoryList :categories="filteredCategories" :readonly="false" 
-          @delete="deleteCategory"
-          @update="updateCategory">
+          @delete="deleteCategory" @update="updateCategory">
         </CategoryList>
     </div>
   </div>

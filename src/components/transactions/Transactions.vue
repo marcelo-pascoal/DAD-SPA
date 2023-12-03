@@ -1,5 +1,4 @@
 <script setup>
-import axios from 'axios'
 import { useToast } from "vue-toastification"
 import { useRouter } from 'vue-router'
 import { useTransactionsStore } from "../../stores/transactions.js"
@@ -58,8 +57,7 @@ onMounted(() => {
   <div class="mb-3 d-flex justify-content-between flex-wrap">
     <div class="mx-2 mt-2 flex-grow-1 filter-div">
       <label for="selectType" class="form-label">Filter by type:</label>
-      <select class="form-select" id="selectType" 
-      v-model="filterByType">
+      <select class="form-select" id="selectType" v-model="filterByType">
         <option :value="null"></option>
         <option value="C">Credit</option>
         <option value="D">Debit</option>
@@ -68,23 +66,15 @@ onMounted(() => {
     <div class="mx-2 mt-2 flex-grow-1 filter-div">
       <label for="selectPair" class="form-label">Filter by Pair:</label>
       <input type="text" class="form-control" id="selectPair"
-        v-model="filterByPair"
-        placeholder="Enter vCard pair"/>
+        v-model="filterByPair" placeholder="Enter vCard pair"/>
     </div>
-
-
     <div class="mx-2 mt-2">
-      <button
-        type="button"
-        class="btn btn-success px-4 btn-addtr"
-        @click="addTransaction"
-      ><i class="bi bi-xs bi-plus-circle"></i>&nbsp; Add Transaction</button>
+      <button type="button"  class="btn btn-success px-4 btn-addtr" @click="addTransaction">
+        <i class="bi bi-xs bi-plus-circle"></i>&nbsp; Add Transaction
+      </button>
     </div>
   </div>
-  <transaction-table
-    :transactions="filteredTransactions"
-    @edit="editTransaction"
-  ></transaction-table>
+  <transaction-table :transactions="filteredTransactions" @edit="editTransaction"> </transaction-table>
 </template>
 
 <style scoped>

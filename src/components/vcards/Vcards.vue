@@ -1,18 +1,19 @@
 <script setup>
-import config from '../utils/config.js'
-import Vcard from './admin/Vcard.vue'
-import { ref, onMounted } from 'vue'
+import Vcard from './Vcard.vue'
+import { ref, inject, onMounted } from 'vue'
 import axios from 'axios';
+
+const serverBaseUrl = inject("serverBaseUrl");
 
 const vcards = ref([])
 
 const fetchCards = async () => {
-    const response = await axios.get(`${config.baseAPI}/vcards`)
+    const response = await axios.get('/vcards')
     vcards.value = response.data.data
 }
 
 const deleteCard = async (vcard) => {
-    await axios.delete(`${config.baseAPI}/vcards/${vcard.phone_number}`);
+    await axios.delete(`${serverBaseUrl}/vcards/${vcard.phone_number}`);
     refresh();
 }
 

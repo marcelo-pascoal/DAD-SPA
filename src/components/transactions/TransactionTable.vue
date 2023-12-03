@@ -26,16 +26,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr
-        v-for="transaction in transactions"
-        :key="transaction.id"
-      >
+      <tr v-for="transaction in transactions" :key="transaction.id">
         <td>{{ transaction.id }}</td>
         <td>{{ transaction.datetime }}</td>
         <td>{{ transaction.type }}</td>
         <td>{{ transaction.value }}</td>
         <td>{{ transaction.new_balance }}</td>
-        
         <td class="text-end">
           <div class="d-flex justify-content-end">
             <button class="btn btn-xs btn-light" @click="editClick(transaction)">

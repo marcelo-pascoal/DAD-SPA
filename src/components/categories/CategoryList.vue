@@ -25,10 +25,9 @@ const updateCategory = (category) => {
 <template>
     <div>
         <ul class="list-group">
-            <Category v-for="category in categories" :key="category.id" 
-                :category="category" 
-                @delete="deleteCategory"
-                @update="updateCategory"></Category>
+            <Category v-for="category in categories" :key="category.id" :category="category" 
+                @delete="deleteCategory" @update="updateCategory">
+            </Category>
         </ul>
     </div>
 </template>

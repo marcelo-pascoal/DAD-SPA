@@ -29,7 +29,7 @@
   }
 
   const addUser = () => {
-      router.push({ name: 'NewUser' })
+      router.push({ name: 'NewUser', params: { type: 'admin' }})
   }
 
   const editUser = (user) => {

@@ -45,7 +45,7 @@ const clickMenuOption = () => {
       <div class="collapse navbar-collapse justify-content-end">
         <ul class="navbar-nav">
           <li class="nav-item" v-show="!userStore.user">
-            <router-link class="nav-link" :class="{ active: $route.name === 'NewUser'}" :to="{ name: 'NewUser' }" @click="clickMenuOption">
+            <router-link class="nav-link" :class="{ active: $route.name === 'NewUser'}" :to="{ name: 'NewUser' , params: { type: 'vcard'}}" @click="clickMenuOption">
               <i class="bi bi-person-check-fill"></i>
               Register
             </router-link >
@@ -109,8 +109,8 @@ const clickMenuOption = () => {
             </li>
             
             <li class="nav-item" v-show="userStore.user?.user_type == 'A'">
-                <router-link class="nav-link" :class="{ active: $route.name === 'AdminVcards' }"
-                            :to="{ name: 'AdminVcards' }" @click="clickMenuOption">
+                <router-link class="nav-link" :class="{ active: $route.name === 'Vcards' }"
+                            :to="{ name: 'Vcards' }" @click="clickMenuOption">
                   <i class="bi bi-list-stars"></i>
                   vCards
                 </router-link>
@@ -143,7 +143,7 @@ const clickMenuOption = () => {
             </h6>
             <ul class="nav flex-column mb-2">
               <li class="nav-item" v-show="!userStore.user">
-                <router-link class="nav-link" :class="{ active: $route.name === 'NewUser'}" :to="{ name: 'NewUser'}"  @click="clickMenuOption">
+                <router-link class="nav-link" :class="{ active: $route.name === 'NewUser'}" :to="{ name: 'NewUser', params: { type: 'vcard'}}"  @click="clickMenuOption">
                   <i class="bi bi-person-check-fill"></i>
                   Register
                 </router-link>

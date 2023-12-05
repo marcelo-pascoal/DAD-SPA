@@ -47,8 +47,14 @@ const router = createRouter({
     },
     {
       path: '/vcards',
-      name: 'AdminVcards',
+      name: 'Vcards',
       component: Vcards
+    },
+    {
+      path: '/users/new/:type',
+      name: 'NewUser',
+      component: User,
+      props: (route) => ({ id: -1, type: route.params.type })
     },
     {
       path: '/categories',
@@ -72,23 +78,12 @@ const router = createRouter({
       component: Users,
     },
     {
-      path: '/users/new',
-      name: 'NewUser',
-      component: User,
-      props: { id: -1 }
-    },
-    {
       path: '/users/:id',
       name: 'User',
       component: User,
       //props: true
       // Replaced with the following line to ensure that id is a number
       props: route => ({ id: parseInt(route.params.id) })
-    },
-    {
-      path: '/reports',
-      name: 'Reports',
-      component: () => import('../views/AboutView.vue')
     },
   ]
 })
@@ -103,7 +98,7 @@ router.beforeEach(async (to, from, next) => {
     next()
     return
   }
-  if (!userStore.user) {
+  if ((!userStore.user) && (!to.name == 'NewUser')) {
     next({ name: 'Login' })
     return
   }
@@ -114,7 +109,7 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   if (to.name == 'User') {
-    if ((userStore.user.type == 'A') || (userStore.user.id == to.params.id)) {
+    if (userStore.user.id == to.params.id) {
       next()
       return
     }

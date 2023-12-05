@@ -74,7 +74,9 @@ onMounted(() => {
       </button>
     </div>
   </div>
+
   <transaction-table :transactions="filteredTransactions" @edit="editTransaction"> </transaction-table>
+  
 </template>
 
 <style scoped>

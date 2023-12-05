@@ -15,16 +15,25 @@ const props = defineProps({
     id: {
       type: Number,
       default: null
+    },
+    type: {
+      type: String,
+      default: null
     }
 })
 
 const newUser = () => {
     return {
       id: null,
+      phone_number: '',
       name: '',
       email: '',
       password: '',
-      password_confirmation: ''
+      password_confirmation: '',
+      phone_number: '',
+      photo_url: '',
+      confirmation_code: '',
+      confirmation_code_conf: '',
     }
 }
 
@@ -53,27 +62,34 @@ const loadUser = async (id) => {
 
 const save = async (userToSave) => {
   errors.value = null
+  let response = null
   if (inserting(props.id)) {
     try {
-      const response = await axios.post('users', userToSave)
+      if (props.type=='admin') response = await axios.post('users', userToSave)
+      else response = await axios.post('vcards', userToSave)
+      /////////////
       user.value = response.data.data
       originalValueStr = JSON.stringify(user.value)
-      toast.success('User #' + user.value.id + ' was registered successfully.')
-      router.push('/users')
+      /////////////
+      toast.success('Registration successfull.')
+      router.back()
     } catch (error) {
+      console.log(error)
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
-        toast.error('User was not registered due to validation errors!')
+        toast.error('Registration not possible due to validation errors!')
       } else {
-        toast.error('User was not registered due to unknown server error!')
+        toast.error('Registration not possible due to unknown server error!')
       }
     }
   } else {
     try {
-      const response = await axios.put('users/' + props.id, userToSave)
+      /////////////
+      response = await axios.put('users/' + props.id, userToSave)
       user.value = response.data.data
+      /////////////
       originalValueStr = JSON.stringify(user.value)
-      toast.success('User #' + user.value.id + ' was updated successfully.')
+      toast.success('Updated successfull.')
       if (user.value.id == userStore.userId) {
         await userStore.loadUser()
       }
@@ -82,9 +98,9 @@ const save = async (userToSave) => {
     } catch (error) {
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
-        toast.error('User #' + props.id + ' was not updated due to validation errors!')
+        toast.error('Update not possible due to validation errors!')
       } else {
-        toast.error('User #' + props.id + ' was not updated due to unknown server error!')
+        toast.error('Update not possible due to unknown server error!')
       }
     }
   }
@@ -114,15 +130,12 @@ onBeforeRouteLeave((to, from, next) => {
   nextCallBack = null
   let newValueStr = JSON.stringify(user.value)
   if (originalValueStr != newValueStr) {
-    // Some value has changed - only leave after confirmation
     nextCallBack = next
     confirmationLeaveDialog.value.show()
   } else {
-    // No value has changed, so we can leave the component without confirming
     next()
   }
 })
-
 
 </script>
 
@@ -137,6 +150,7 @@ onBeforeRouteLeave((to, from, next) => {
 
   <user-detail
     :user="user"
+    :type="type"
     :errors="errors"
     :inserting="inserting(id)"
     @save="save"

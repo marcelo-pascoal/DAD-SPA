@@ -1,5 +1,5 @@
 <script setup>
-import Vcard from './Vcard.vue'
+import VcardList from './VcardList.vue'
 import { ref, inject, onMounted } from 'vue'
 import axios from 'axios';
 
@@ -37,7 +37,7 @@ onMounted(() => {
     <div class="container border">
         <div class="d-flex">
             <div class="flex-grow-1">
-                <h4 class="mt-3">[AdminVcards.vue]</h4>
+                <h4 class="mt-3">[Vcards.vue]</h4>
             </div>
             <div class="flex-grow-0 d-flex flex-column justify-content-end">
                 <button type="button" class="btn btn-dark" @click="refresh">
@@ -48,10 +48,10 @@ onMounted(() => {
         <hr>
             <div>
         <ul class="list-group">
-            <Vcard v-for="vcard in vcards" :key="vcard.phone_number" 
+            <VcardList v-for="vcard in vcards" :key="vcard.phone_number" 
                 :vcard="vcard" 
                 @requestRemoveFromList="deleteCard"
-                @requestUpdateCard="updateCard"></Vcard>
+                @requestUpdateCard="updateCard"></VcardList>
         </ul>
     
     </div>

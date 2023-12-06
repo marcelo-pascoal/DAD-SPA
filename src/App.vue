@@ -67,8 +67,8 @@ const clickMenuOption = () => {
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>
                 <router-link class="dropdown-item"
-                            :class="{ active: $route.name == 'User' && $route.params.id == userStore.userId }"
-                            :to="{ name: 'User', params: { id: userStore.userId } }" @click="clickMenuOption">
+                            :class="{ active: ($route.name == 'Vcard' || $route.name == 'Admin') && $route.params.id == userStore.userId }"
+                            :to="{ name: userStore.user?.user_type == 'V' ? 'Vcard' : 'Admin', params: { id: userStore.userId } }" @click="clickMenuOption">
                   <i class="bi bi-person-square"></i>
                   Profile
                 </router-link>
@@ -164,8 +164,8 @@ const clickMenuOption = () => {
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
                   <li>
                     <router-link class="dropdown-item"
-                                :class="{ active: $route.name == 'User' && $route.params.id == userStore.userId }"
-                                :to="{ name: 'User', params: { id: userStore.userId } }" @click="clickMenuOption">
+                            :class="{ active: ($route.name == 'Vcard' || $route.name == 'Admin') && $route.params.id == userStore.userId }"
+                            :to="{ name: userStore.user?.user_type == 'V' ? 'Vcard' : 'Admin', params: { id: userStore.userId } }" @click="clickMenuOption">
                       <i class="bi bi-person-square"></i>
                       Profile
                     </router-link>

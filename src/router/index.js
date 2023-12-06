@@ -15,6 +15,7 @@ import Categories from '../components/categories/Categories.vue'
 let handlingFirstRoute = true
 
 const router = createRouter({
+  
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -51,7 +52,7 @@ const router = createRouter({
       component: Vcards
     },
     {
-      path: '/users/new/:type',
+      path: '/:type/new',
       name: 'NewUser',
       component: User,
       props: (route) => ({ id: -1, type: route.params.type })
@@ -78,12 +79,20 @@ const router = createRouter({
       component: Users,
     },
     {
-      path: '/users/:id',
-      name: 'User',
+      path: '/vcard/:id',
+      name: 'Vcard',
       component: User,
       //props: true
       // Replaced with the following line to ensure that id is a number
-      props: route => ({ id: parseInt(route.params.id) })
+      props: route => ({ id: parseInt(route.params.id), type: 'vcard'})
+    },
+    {
+      path: '/admin/:id',
+      name: 'Admin',
+      component: User,
+      //props: true
+      // Replaced with the following line to ensure that id is a number
+      props: route => ({ id: parseInt(route.params.id), type: 'admin' })
     },
   ]
 })

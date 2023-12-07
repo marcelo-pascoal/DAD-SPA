@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted} from 'vue'
 
 const newCategory = ref('')
 const newCategoryType = ref('')

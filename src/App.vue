@@ -2,16 +2,14 @@
 import { useRouter, RouterLink, RouterView } from 'vue-router'
 import { useToast } from "vue-toastification"
 import { useUserStore } from './stores/user.js'
-//import { useProjectsStore } from "./stores/projects.js"
 
 const toast = useToast()
 const userStore = useUserStore()
-//const projectsStore = useProjectsStore()
 const router = useRouter()
 
 const logout = async () => {
   if (await userStore.logout()) {
-    toast.success('User has logged out of the application.')
+    toast.success('Logout Successful.')
     clickMenuOption()
     router.push({ name: 'home' })
   } else {

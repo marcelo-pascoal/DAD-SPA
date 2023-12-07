@@ -9,6 +9,7 @@ import Users from "../components/users/Users.vue"
 import Vcards from '../components/vcards/Vcards.vue'
 import Transactions from '../components/transactions/Transactions.vue'
 import Transaction from  '../components/transactions/Transaction.vue'
+import Blocked from  '../views/Blocked.vue'
 
 import Categories from '../components/categories/Categories.vue'
 
@@ -18,6 +19,11 @@ const router = createRouter({
   
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/blocked',
+      name: 'blocked',
+      component: Blocked
+    },
     {
       path: '/',
       name: 'home',
@@ -102,6 +108,12 @@ router.beforeEach(async (to, from, next) => {
   if (handlingFirstRoute) {
     handlingFirstRoute = false
     await userStore.restoreToken()
+  }
+  
+  if (userStore.user && userStore.user.blocked && to.name !== 'blocked') {
+      // Redirect to the blocked page
+      next({ name: 'blocked' });
+      return
   }
   if ((to.name == 'Login') || (to.name == 'home') || (to.name == 'NewUser')) {
     next()

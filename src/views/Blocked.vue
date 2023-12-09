@@ -32,7 +32,7 @@ const clickMenuOption = () => {
     <h1>Account Blocked</h1>
     <h3>Your account has been blocked by administration</h3>
     <button id="button-logout" type="button" class="btn btn-warning px-4 btn-addtr"
-                        @click.prevent="logout"><i class="bi bi-xs bi-plus-circle"></i>&nbsp; Logout
+                        @click.prevent="logout"><i class="btn btn-secondary bi-xs bi-plus-circle"></i>&nbsp; Logout
                     </button>
                   </div>
 </template>

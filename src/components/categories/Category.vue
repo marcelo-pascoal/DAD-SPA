@@ -35,6 +35,10 @@ const updateCategory = (category) => {
 
 <template>
     <li class="list-group-item">
+        <button :class="'btn ' + (category.type==='D' ? 'btn-warning' : 'btn-success') + ' btn-xs'" @click="closeEdit">
+                <i :class=category.icon aria-hidden="true"></i>
+            </button>
+
         <button class="btn btn-xs btn-light" disabled>
               <i class="bi bi-xs bi-cash" v-if="category.type === 'C'" ></i>
               <i class="bi bi-xs bi-cart3" v-else ></i>

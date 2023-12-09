@@ -10,17 +10,9 @@ const toast = useToast()
 const filterByName = ref('')
 const filterByType = ref('')
 
-const newCategory = () => { 
-  return {
-    id: null,
-    type: '',
-    name: '',
-  }
-}
 
-const category = ref(newCategory())
 const categoriesStore = useCategoriesStore()
-const errors = ref(null)
+
 const categoryToDelete = ref(null)
 const deleteConfirmationDialog = ref(null)
 
@@ -29,23 +21,6 @@ const loadCategories = async () => {
     await categoriesStore.loadCategories()
   } catch (error) {
     console.log(error)
-  }
-}
-
-const addCategory = async (newCategory) => {
-  errors.value = null
-  if (newCategory) {
-    try {
-      category.value = await categoriesStore.insertCategory(newCategory)
-      toast.success('Category #' + category.value.id + ' was created successfully.')
-    }catch (error) {
-      if (error.response.status == 422) {
-        errors.value = error.response.data.errors
-        toast.error('Category was not created due to validation errors!')
-      } else {
-        toast.error('Category was not created due to unknown server error!')
-      }
-    }
   }
 }
 
@@ -86,10 +61,6 @@ const updateCategory = async (category) => {
   }  
 }
 
-const refresh = async () => {
-  loadCategories()
-}
-
 onMounted(async () => {
   loadCategories()
 })
@@ -105,16 +76,12 @@ onMounted(async () => {
   </confirmation-dialog>
 
   <div class="container">
-    <h1>Categories</h1>
-    <NewCategory @add="addCategory"></NewCategory>
+    
+    <h3 class="mt-5 mb-3">Categories</h3>
+    <NewCategory></NewCategory>
     <div class="d-flex">
       <div class="flex-grow-1">
-        <h3 class="mt-3">Category List</h3>
-      </div>
-      <div class="flex-grow-0 d-flex flex-column justify-content-end">
-        <button type="button" class="btn btn-dark" @click="refresh">
-            <i class="bi-repeat" aria-hidden="true"></i> Refresh
-        </button>
+        <h5 class="mt-3">Category List</h5>
       </div>
     </div>
     <hr>
@@ -151,12 +118,6 @@ onMounted(async () => {
   }
 
   span.error {
-    font-size: small;
-    display: block;
-    color: red;
-  }
-
-  .errors {
     font-size: small;
     display: block;
     color: red;

@@ -19,7 +19,6 @@ const filteredItems = computed(() => {
 });
 
 const select = (selection) => {
-  console.log(selection)
   emit('select', selection);
 };
 

@@ -66,7 +66,6 @@ button.btn {
     margin-left: 5px;
 }
 
-
 .list-group-item.closed:hover{
     background-color: lightgrey
 }

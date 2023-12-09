@@ -55,7 +55,7 @@ onMounted(() => {
     <form action="#" class="d-flex align-items-center">
       &nbsp
       <div class="">
-            <button id="2" :class=" iconStyle +' btn btn-secondary d-block ' + editCategory.icon" @click.prevent=openModal>
+            <button :class=" iconStyle +' btn btn-secondary d-block ' + editCategory.icon" @click.prevent=openModal>
             </button>
         </div>
         &nbsp

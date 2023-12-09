@@ -2,20 +2,20 @@
 import { ref, watch, onMounted} from 'vue'
 import IconSelectModal from "../IconSelectModal.vue"
 import { useCategoriesStore } from "../../stores/categories.js"
+import { useToast } from "vue-toastification"
 
-
+const toast = useToast()
 const categoriesStore = useCategoriesStore()
+
+const emit = defineEmits([
+    'add'
+])
 
 const showErrors = ref(false) // just for testing the errors presentation/layout
 
 const newCategoryName = ref('')
 const newCategoryIcon = ref('bi-cash')
 const newCategoryType = ref('')
-
-const emit = defineEmits([
-    'add'
-])
-
 const iconStyle = ref('btn-secondary')
 
 const isModalOpened = ref(false);
@@ -36,17 +36,17 @@ watch(newCategoryType, (newValue) => {
     if (!newValue) iconStyle.value = 'btn-secondary'
       if (newValue=='C') iconStyle.value = 'btn-success'
       else iconStyle.value = 'btn-warning'
-    });
-    
+});
+
 const addCategory = async () => {
-    const newCategory = {
+    let newCategory = {
             id: null,
             type: newCategoryType.value,
             name: newCategoryName.value,
             icon: newCategoryIcon.value,
         }
     try {
-    await categoriesStore.insertCategory(newCategory)
+        newCategory = await categoriesStore.insertCategory(newCategory)
     toast.success('Category #' + newCategory.id + ' was created successfully.')
     }catch (error) {
         console.log(error)

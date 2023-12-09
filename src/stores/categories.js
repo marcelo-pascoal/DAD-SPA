@@ -74,7 +74,6 @@ export const useCategoriesStore = defineStore('categories', () => {
     }
 
     async function updateCategory(updateCategory) {
-        console.log(updateCategory)
         const response = await axios.put('categories/' + updateCategory.id, updateCategory)
         updateCategoryOnArray(response.data.data)
         socket.emit('updateCategory', response.data.data)

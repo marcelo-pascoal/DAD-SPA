@@ -10,7 +10,6 @@ const toast = useToast()
 const filterByName = ref('')
 const filterByType = ref('')
 
-
 const categoriesStore = useCategoriesStore()
 
 const categoryToDelete = ref(null)

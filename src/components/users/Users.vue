@@ -33,7 +33,7 @@
   }
 
   const editUser = (user) => {
-    router.push({ name: 'User', params: { id: user.id } })
+    router.push({ name: 'Admin', params: { id: user.id } })
   }
 
   const deleteUser = (user) => {

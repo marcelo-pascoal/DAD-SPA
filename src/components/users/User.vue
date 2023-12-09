@@ -65,12 +65,13 @@ const save = async (userToSave) => {
   let response = null
   if (inserting(props.id)) {
     try {
-      if (props.type=='admin') response = await axios.post('users', userToSave)
+      if (props.type=='admin'){
+        response = await axios.post('users', userToSave)
+        socket.emit('insertedUser', user.value)
+      }
       else response = await axios.post('vcards', userToSave)
-      /////////////
       user.value = response.data.data
       originalValueStr = JSON.stringify(user.value)
-      /////////////
       toast.success('Registration successfull.')
       router.back()
     } catch (error) {

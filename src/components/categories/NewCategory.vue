@@ -63,16 +63,13 @@ onMounted(() => {
 
 <template>
     <form action="#">
-        <h5>New Category</h5>
         <div>
             <div class="d-flex flex-wrap justify-content-between justify-content-end align-items-end">
-                
                 <div>
                     <label for="2" >Icon:</label>
                     <button id="2" :class=" iconStyle +' btn btn-secondary d-block ' + newCategoryIcon" @click.prevent=openModal>
                     </button>
                 </div>
-
                 <div class="mx-1 mt-1 ">
                     <label for="3">Type:</label>
                     <select id="3" class="form-select" v-model="newCategoryType">

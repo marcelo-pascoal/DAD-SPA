@@ -73,15 +73,9 @@ export const useTransactionsStore = defineStore('transactions', () => {
         return response.data.data
     }
 
-    socket.on('newTransaction', (transaction) => {
-        transactions.value.push(transaction)
-        toast.success(`A new transaction was created (#${transaction.id} : ${transaction.type} : ${transaction.value})`)
+    socket.on('accountCredited', (transaction) => {
+        transactions.value.unshift(transaction)
     })
-
-    socket.on('updateTransaction', (transaction) => {
-        updateTransactionOnArray(transaction)
-        toast.info(`The transaction (#${transaction.id}) was updated!`)
-    })   
 
     return {
         transactions,

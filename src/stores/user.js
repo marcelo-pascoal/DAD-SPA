@@ -144,6 +144,11 @@ export const useUserStore = defineStore('user', () => {
         logout ()
     })
 
+    socket.on('accountCredited', (transaction) => {
+        toast.success(`You account has been credited (#${transaction.payment_type} (${transaction.payment_reference}): ${transaction.value})`)
+        getFinantialInfo()
+    })
+
     return {
         user,
         userId,

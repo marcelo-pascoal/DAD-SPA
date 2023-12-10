@@ -29,7 +29,7 @@ onMounted(() => {
       <div class="me-3">
         <div class="form-check mt-4">
           <input class="form-check-input" type="checkbox" id="blockCheckbox" v-model="editCard.blocked">
-          <label class="form-check-label" for="blockCheckbox">Blocked</label>
+          <label class="form-check-label" for="blockCheckbox"><h5>Blocked</h5></label>
         </div>
         <div class="error" v-show="showErrors">Show error if necessary</div>
       </div>
@@ -42,37 +42,35 @@ onMounted(() => {
         </div>
         <div class="error" v-show="showErrors">Show error if necessary</div>
       </div>
-      <div class="me-0">
-        <div class="d-flex flex-column submitBox">
-          <button type="submit" class="btn btn-primary" @click.prevent="save">
+      <div class="submitBox">
+          <button type="submit" class="btn btn-primary mt-2" @click.prevent="save">
               <i class="bi-check-lg" aria-hidden="true"></i> Save
           </button>
           <button type="button" class="btn btn-secondary mt-2" @click="cancel">
                 <i class="bi-x-lg" aria-hidden="true"></i> Cancel
           </button>
         </div>
-      </div>
     </form>
 </template>
 
-<style>
+<style scoped>
 
 .maxDebit{
     width: 90px;
     text-align: center;
 }
 
+.btn-secondary{
+  margin-left: 5px;
+}
 #maxDebit {
     background-color: lightgoldenrodyellow;
 }
-
-@media (max-width:770px)
-{
-  .btn.btn-primary , .btn-secondary{
-  font-size: 0;
-  }
-  .btn.btn-primary i , .btn-secondary i{
-  font-size: 1rem;
-  }  
+@media (max-width:770px){
+.submitBox{
+ margin-right: -10px;
+ 
 }
+}
+
 </style>

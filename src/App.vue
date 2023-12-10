@@ -225,4 +225,8 @@ const clickMenuOption = () => {
 #sidebarMenu {
   overflow-y: auto;
 }
+
+.container{
+        max-width: none;
+    }
 </style>

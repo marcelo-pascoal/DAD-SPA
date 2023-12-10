@@ -76,9 +76,8 @@ const detailRequestedUpdateCard = (vcard) => {
                 </button>
             </div>
         </div>
-        <div class="float-end" v-if="cardEdit"> 
-        <hr>
-                <VcardDetail :vcard="cardEdit" @requestUpdateCard="detailRequestedUpdateCard" @hide="closeEdit"></VcardDetail>
+        <div v-if="cardEdit"> 
+            <VcardDetail :vcard="cardEdit" @requestUpdateCard="detailRequestedUpdateCard" @hide="closeEdit"></VcardDetail>
         </div>
     </li>
 </template>

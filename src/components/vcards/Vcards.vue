@@ -1,14 +1,12 @@
 <script setup>
 import { useToast } from "vue-toastification"
-import VcardList from './VcardList.vue'
+import Vcard from './Vcard.vue'
 import { ref, inject, onMounted } from 'vue'
 import axios from 'axios';
 
 const socket = inject("socket")
 
 const toast = useToast()
-
-const serverBaseUrl = inject("serverBaseUrl");
 
 const vcards = ref([])
 
@@ -22,7 +20,7 @@ const fetchCards = async () => {
 }
 
 const updateCard = async (vcard) => {
-  await axios.put(`${config.baseAPI}/vcards/${vcard.phone_number}`, vcard)
+  await axios.put(`/vcards/${vcard.phone_number}`, vcard)
   fetchCards()
 }
 
@@ -46,16 +44,18 @@ socket.on('updatedVcard', () => {
 
 <template>
     <br>
-    <div class="container border">
+    <div class="container">
         <h3 class="mt-5 mb-3">vCards</h3>
             <div>
         <ul class="list-group">
-            <VcardList v-for="vcard in vcards" :key="vcard.phone_number" 
+            <Vcard v-for="vcard in vcards" :key="vcard.phone_number" 
                 :vcard="vcard" 
                 @requestRemoveFromList="deleteCard"
-                @requestUpdateCard="updateCard"></VcardList>
+                @requestUpdateCard="updateCard"></Vcard>
         </ul>
     
     </div>
 </div>
 </template>
+
+

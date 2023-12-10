@@ -38,7 +38,7 @@ onMounted(() => {
 })
 
 socket.on('updatedVcard', () => {
-    toast.info("vCard list has been changed")
+    toast.info("vCard list has been altered")
     fetchCards()
 })
 socket.on('insertedVcard', (insertedVcard) => {

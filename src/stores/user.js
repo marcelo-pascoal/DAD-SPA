@@ -3,15 +3,20 @@ import { ref, computed, inject } from 'vue'
 import { defineStore } from 'pinia'
 import avatarNoneUrl from '@/assets/avatar-none.png'
 import { useToast } from "vue-toastification"
+import { useRouter, useRoute} from 'vue-router'
 
 export const useUserStore = defineStore('user', () => {
     const socket = inject("socket")
     const toast = useToast()
 
+    const router = useRouter()
+    const route = useRoute()
     const serverBaseUrl = inject('serverBaseUrl')
 
     const user = ref(null)
 
+
+    const userBlocked = computed(() => user.value?.blocked)
     const userName = computed(() => user.value?.name ?? 'Anonymous')
 
     const userId = computed(() => user.value?.id ?? -1)
@@ -91,23 +96,37 @@ export const useUserStore = defineStore('user', () => {
     }
 
     
-    socket.on('insertedVcard', (insertedVcard) => {
-        toast.info(`vCard #${insertedVcard.phone_number} (${insertedVcard.name}) has registered successfully!`)
+    socket.on('insertedVcard', (vcard) => {
+        toast.info(`vCard #${vcard.phone_number} (${vcard.name}) has registered successfully!`)
     })
 
-    socket.on('updatedAdmin', (updatedAdmin) => {
-        toast.info(`Admin profile #${updatedAdmin.id} (${updatedAdmin.name}) has changed!`)
+    socket.on('updatedAdmin', (admin) => {
+        toast.info(`Admin profile #${admin.id} (${admin.name}) has changed!`)
     })
 
     socket.on('updatedVcard', (vcard) => {
-        console.log(vcard)
         if (user.value?.id == vcard.phone_number) {
-            loadUser()
-            toast.info('Your profile has been changed!')
+            loadUser();
+            if(route.name == 'blocked' && !vcard.blocked){
+                toast.info('Your account has been unblocked!')
+                router.push({ name: 'Vcard', params: { id: vcard.phone_number } })
+            }
+            else if(vcard.blocked){
+                toast.error('Your account has been blocked!')
+                router.push({ name: 'blocked' })
+            }
+            else{
+            toast.info('Your profile has been altered!')
+            }
         } 
         else {
             toast.info(`Admin profile #${updatedAdmin.id} (${updatedAdmin.name}) has changed!`)
         }
+    })
+
+    socket.on('accountDeleted', (vcard) => {
+        toast.error('You account has been revoked')
+        logout ()
     })
 
     return {

@@ -110,7 +110,7 @@ router.beforeEach(async (to, from, next) => {
     await userStore.restoreToken()
   }
   
-  if (userStore.user && userStore.user.blocked && to.name !== 'blocked') {
+  if (userStore.userBlocked && to.name !== 'blocked') {
       // Redirect to the blocked page
       next({ name: 'blocked' });
       return

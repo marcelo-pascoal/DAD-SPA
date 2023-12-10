@@ -44,7 +44,7 @@
     try {
       await axios.delete(`/users/${userToDelete.value.id}`)
       toast.info(`Administrator ${userToDeleteDescription.value} was deleted`)
-      socket.emit('deletedUser', userToDelete.value)
+      socket.emit('deletedAdmin', userToDelete.value)
       loadUsers()
     } catch (error) {
       console.log(error)
@@ -60,7 +60,7 @@
     loadUsers()
   })
 
-  socket.on('usersUpdated', () => {
+  socket.on('adminsUpdated', () => {
     toast.info("Admin list has been changed")
     loadUsers()
   })

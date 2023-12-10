@@ -88,7 +88,13 @@ export const useCategoriesStore = defineStore('categories', () => {
     }
 
     async function deleteCategory( deleteCategory) {
-        const response = await axios.delete('categories/' + deleteCategory.id)
+        let response = null;
+        if(userStore.userType ==='V') {
+            response = await axios.delete('categories/' + deleteCategory.id)
+        } 
+        else {
+            response = await axios.delete('categories/default/' + deleteCategory.id)
+        } 
         deleteCategoryOnArray(response.data.data)
         socket.emit('deleteCategory', response.data.data)
         return response.data.data

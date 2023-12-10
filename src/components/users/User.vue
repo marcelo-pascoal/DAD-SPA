@@ -67,7 +67,7 @@ const save = async (userToSave) => {
     try {
       if (props.type=='admin'){
         response = await axios.post('users', userToSave)
-        socket.emit('insertedUser', response.data.data)
+        socket.emit('insertedAdmin', response.data.data)
       }
       else {
         response = await axios.post('vcards', userToSave)
@@ -97,7 +97,12 @@ const save = async (userToSave) => {
       if (user.value.id == userStore.userId) {
         await userStore.loadUser()
       }
-      socket.emit('updatedUser', user.value)
+      if (props.type=='admin'){
+        socket.emit('updatedAdmin', user.value)
+      }
+      else{
+        socket.emit('updatedVcard', user.value)
+      }
       router.back()
     } catch (error) {
       if (error.response.status == 422) {

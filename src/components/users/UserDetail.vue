@@ -147,11 +147,11 @@ const cancel = () => {
             <img :src="photoFullUrl" class="w-100" />
           </div>
           <div class="mt-3 d-flex justify-content-between flex-wrap">
-            <label for="inputPhoto" class="btn btn-dark flex-grow-1 mx-1">Carregar</label>
+            <label for="inputPhoto" class="btn btn-dark flex-grow-1 mx-1">Upload</label>
             <button class="btn btn-secondary flex-grow-1 mx-1" @click.prevent="resetToOriginalPhoto" 
-              v-if="editingUser.photo_url">Repor</button>
+              v-if="editingUser.photo_url">Reset</button>
             <button class="btn btn-danger flex-grow-1 mx-1" @click.prevent="cleanPhoto" 
-              v-show="editingUser.photo_url || editingImageAsBase64">Apagar</button>
+              v-show="editingUser.photo_url || editingImageAsBase64">Delete</button>
           </div>
           <div>
             <field-error-message :errors="errors" fieldName="base64ImagePhoto"></field-error-message>
@@ -161,6 +161,7 @@ const cancel = () => {
     </div>
     <hr/>
     <div class="mt-2 d-flex justify-content-end">
+      <button type="button" class="btn btn-danger px-5 mx-2" @click="save">Delete Account</button>
       <button type="button" class="btn btn-primary px-5 mx-2" @click="save">Save</button>
       <button type="button" class="btn btn-light px-5 mx-2" @click="cancel">Cancel</button>
     </div>

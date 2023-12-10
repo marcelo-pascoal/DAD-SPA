@@ -23,12 +23,6 @@ const clickToDeleteCard = (vcard) => {
     emit('requestRemoveFromList', vcard)
 }
 
-const toggleBlock = async (vcard) => {
-    closeEdit()
-    await axios.patch(`${config.baseAPI}/vcards/${vcard.phone_number}/blocked`, {blocked:!vcard.blocked}) 
-    vcard.blocked = !vcard.blocked
-}
-
 const editCard = (vcard) => {
     cardEdit.value = vcard
 }
@@ -53,13 +47,6 @@ const detailRequestedUpdateCard = (vcard) => {
             <span id="balance" :class="{ blocked: vcard.blocked }">{{ props.vcard.balance }}€</span>
 
             <div class="float-end adminBox" v-show="!readonly">
-                <button class="btn btn-secondary btn-xs" @click="toggleBlock(vcard)" v-if="vcard.blocked">
-                    <i class="bi-ban" aria-hidden="true"></i>
-                </button>
-                <button class="btn btn-success btn-xs" @click="toggleBlock(vcard)" v-else>
-                    <i class="bi-check-lg" aria-hidden="true"></i>
-                </button>
-
                 <button class="btn btn-danger disabled btn-xs" v-if="vcard.balance>0">
                     <i class="bi-trash" aria-hidden="true"></i>
                 </button>

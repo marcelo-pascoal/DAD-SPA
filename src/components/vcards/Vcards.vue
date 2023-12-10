@@ -53,7 +53,7 @@ socket.on('insertedVcard', (insertedVcard) => {
         <h3 class="mt-5 mb-3">vCards</h3>
             <div>
         <ul class="list-group">
-            <Vcard v-for="vcard in vcards" :key="vcard.phone_number" 
+            <Vcard v-for="vcard in vcards" :key="vcard.phone_number" class="vcard"
                 :vcard="vcard" 
                 @requestRemoveFromList="deleteCard"
                 @requestUpdateCard="updateCard"></Vcard>
@@ -63,4 +63,9 @@ socket.on('insertedVcard', (insertedVcard) => {
 </div>
 </template>
 
+<style scoped>
+.vcard{
+    margin-bottom: 10px;
+}
+</style>
 

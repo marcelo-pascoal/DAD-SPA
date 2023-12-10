@@ -201,6 +201,10 @@ const clickMenuOption = () => {
 <style>
 @import "./assets/dashboard.css";
 
+body {
+  background-color:lightgrey
+}
+
 .avatar-img {
   margin: -1.2rem 0.8rem -2rem 0.8rem;
   width: 3.3rem;

@@ -36,7 +36,7 @@ const clickMenuOption = () => {
       </router-link>
       <div class="balance" v-if="userStore.user?.user_type == 'V'">
         <label for="accountBalance">Balance:</label>
-        <input type="text" id="accountBalance" v-model="userStore.accountBalance" readonly>
+        <input type="text" style="text-align: right;" id="accountBalance" :value="'€ ' + userStore.accountBalance" readonly>
       </div>
       <button id="buttonSidebarExpandId" class="navbar-toggler" type="button" data-bs-toggle="collapse"
         data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">

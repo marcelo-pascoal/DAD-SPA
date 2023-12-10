@@ -33,7 +33,12 @@
   )
 
   const transactionTitle = computed(()=>{
-    let method = editingTransaction.value.type === 'C' ? 'Credit' : 'Debit'
+    let method = ""
+    if(props.operationType == 'insert'){
+      if(userStore.userType == 'V') method = 'Debit'
+      else method = 'Credit'
+    }else method = editingTransaction.value.type === 'C' ? 'Credit' : 'Debit'
+    
     if (!editingTransaction.value) {
         return ''
       }

@@ -59,7 +59,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
         return response.data.data
     }
 
-    function updateTransactionOnArray(transactions) {
+    function updateTransactionOnArray(transaction) {
         let idx = transactions.value.findIndex((t) => t.id === transaction.id)
         if (idx >= 0) {
             transactions.value[idx] = transaction

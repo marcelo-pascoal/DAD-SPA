@@ -18,7 +18,7 @@ export const useUserStore = defineStore('user', () => {
 
     const accountBalance = ref(0)
     const maxDebit = ref(0)
-    
+
     const userName = computed(() => user.value?.name ?? 'Anonymous')
 
     const userId = computed(() => user.value?.id ?? -1)
@@ -33,7 +33,6 @@ export const useUserStore = defineStore('user', () => {
     async function getFinantialInfo() {
         try{
             const response = await axios.get('vcards/'+user.value?.id)
-            console.log(response.data.data.balance)
             accountBalance.value = response.data.data.balance
             maxDebit.value = response.data.data.max_debit
         }   catch (error) {
@@ -125,6 +124,7 @@ export const useUserStore = defineStore('user', () => {
             if(route.name == 'blocked' && !vcard.blocked){
                 toast.info('Your account has been unblocked!')
                 router.push({ name: 'Vcard', params: { id: vcard.phone_number } })
+                
             }
             else if(vcard.blocked){
                 toast.error('Your account has been blocked!')

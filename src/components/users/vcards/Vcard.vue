@@ -1,5 +1,5 @@
 <script setup>
-import config from '../../utils/config.js'
+import config from '../../../utils/config.js'
 import VcardDetail from './VcardDetail.vue'
 import {ref, computed} from 'vue'
 import axios from 'axios';

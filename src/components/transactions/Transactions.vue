@@ -5,7 +5,6 @@ import { useTransactionsStore } from "../../stores/transactions.js"
 import { ref, computed, onMounted } from 'vue'
 import TransactionTable from "./TransactionTable.vue"
 
-const toast = useToast()
 const router = useRouter()
 const transactionsStore = useTransactionsStore()
 

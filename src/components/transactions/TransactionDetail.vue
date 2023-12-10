@@ -96,11 +96,11 @@
 
     <div class="d-flex flex-wrap justify-content-between">
       <div class="mb-3 me-3 flex-grow-1">
-        <label for="inputMethod" class="form-label">Destination</label>
+        <label for="inputMethod" class="form-label">{{userStore.userType=='V' ? 'Destination' : 'Origin'}}</label>
         <select class="form-select" 
         :class="{ 'is-invalid': errors ? errors['payment_type'] : false }"
           id="inputMethod" v-model="editingTransaction.payment_type">
-          <option value="VCARD">vCard</option>
+          <option v-if="userStore.userType=='V'"  value="VCARD">vCard</option>
           <option value="MBWAY">MBWAY</option>
           <option value="PAYPAL">PayPal</option>
           <option value="IBAN">Transfer</option>
@@ -112,31 +112,32 @@
       <div class="mb-3 ms-xs-3 flex-grow-1">
         <label for="inputReference" class="form-label">Reference</label>
         <input type="text" class="form-control" :class="{ 'is-invalid': errors ? errors['payment_reference'] : false }"
-          id="inputReference" placeholder="Destination Reference" required
+          id="inputReference" required
           v-model="editingTransaction.payment_reference">
+          
         <field-error-message :errors="errors" fieldName="reference"></field-error-message>
       </div>
     </div>
     <div class="d-flex flex-wrap justify-content-between">
-      <div class="mb-3 me-3 flex-grow-1">
-        <label
-          for="inputCategory"
-          class="form-label"
-        >Category</label>
-        <select
-          class="form-select pe-2"
-          :class="{ 'is-invalid': errors ? errors['category'] : false }"
-          id="inputCategory"
-          v-model="editingTransaction.category_id"
-        >
+      <div class="mb-3 me-3 flex-grow-1" v-if="userStore.userType=='V'">
+        <label for="inputCategory" class="form-label">Category</label>
+        <select class="form-select pe-2" :class="{ 'is-invalid': errors ? errors['category'] : false }"
+          id="inputCategory" v-model="editingTransaction.category_id">
           <option :value="null">-- No Category --</option>
-          <option 
-            v-for="category in categoriesStore.categories.filter(category => category.type == editingTransaction.type)"
-            :key="category.id"
-            :value="category.id"
-          >{{category.name}}</option>
+          <option v-for="category in categoriesStore.categories.filter(
+            category => category.type == editingTransaction.type)"
+            :key="category.id" :value="category.id">{{category.name}}
+          </option>
         </select>
-        <field-error-message :errors="errors" fieldName="responsible_id"></field-error-message>
+        <field-error-message :errors="errors" fieldName="category_id"></field-error-message>
+      </div>
+      <!--vcard destino-->
+      <div class="mb-3 me-3 flex-grow-1" v-else>
+        <label for="inputVcard" class="form-label">Destination vCard</label>
+        <input type="text" class="form-control" :class="{ 'is-invalid': errors ? errors['vcard'] : false }"
+          id="inputVcard" required
+          v-model="editingTransaction.vcard">
+        <field-error-message :errors="errors" fieldName="category_id"></field-error-message>
       </div>
       <div class="mb-3 me-3 flex-grow-1">
         <label for="inputValue" class="form-label">Value</label>

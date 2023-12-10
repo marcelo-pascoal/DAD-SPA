@@ -5,8 +5,8 @@ import Dashboard from "../components/Dashboard.vue"
 import Login from "../components/auth/Login.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
 import User from "../components/users/User.vue"
-import Admins from "../components/admins/Admins.vue"
-import Vcards from '../components/vcards/Vcards.vue'
+import Admins from "../components/users/admins/Admins.vue"
+import Vcards from '../components/users/vcards/Vcards.vue'
 import Transactions from '../components/transactions/Transactions.vue'
 import Transaction from  '../components/transactions/Transaction.vue'
 import Blocked from  '../views/Blocked.vue'

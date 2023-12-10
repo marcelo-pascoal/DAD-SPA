@@ -5,8 +5,11 @@ import { useUserStore } from "../../stores/user.js"
 import { useTransactionsStore } from "../../stores/transactions.js"
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
-import { ref, watch, computed} from 'vue'
+import { ref, watch, computed, inject} from 'vue'
 import TransactionDetail from "./TransactionDetail.vue"
+
+
+const socket = inject("socket")
 
 const toast = useToast()
 const router = useRouter()
@@ -15,6 +18,7 @@ const transactionsStore = useTransactionsStore()
 
 const newTransaction = () => { 
   return {
+    vcard: null,
     type: null,
     value: null,
     payment_type:null,
@@ -51,12 +55,16 @@ const save = async () => {
   errors.value = null
   if (operation.value == 'insert') {
     try {
+      
+      transaction.value.type = userStore.userType == 'V' ? 'D' : 'C'
       console.log(transaction.value)
       transaction.value = await transactionsStore.insertTransaction(transaction.value)
       originalValueStr = JSON.stringify(transaction.value)
+      socket.emit('submitedTransaction', transaction.value)
       toast.success('Transaction #' + transaction.value.id + ' was created successfully.')
       router.back()
     } catch (error) {
+      console.log(error)
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
         toast.error('Transaction was not created due to validation errors!')

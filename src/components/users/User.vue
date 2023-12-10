@@ -40,6 +40,7 @@ const newUser = () => {
 const user = ref(newUser())
 const errors = ref(null)
 const confirmationLeaveDialog = ref(null)
+const deleteConfirmationDialog = ref(null)
 
 let originalValueStr = ''
 
@@ -115,6 +116,23 @@ const save = async (userToSave) => {
   }
 }
 
+const deleteAccount = () => { 
+    deleteConfirmationDialog.value.show()
+}
+
+const deleteAccountConfirmed = async () => {
+  try {
+    await axios.delete(`/users/${userStore.userId}`)
+    toast.warning(`You account has been deleted!`)
+    userStore.userType == 'V' ? socket.emit('deletedVcard', userStore.user) : socket.emit('deletedAdmin', userStore.user)
+    userStore.clearUser()
+    router.push({ name: 'home' })
+  } catch (error) {
+    console.log(error)
+    toast.error(`It was not possible to delete your Account!`)
+  }  
+}
+
 const cancel = () => {
   originalValueStr = JSON.stringify(user.value)
   router.back()
@@ -150,6 +168,14 @@ onBeforeRouteLeave((to, from, next) => {
 
 <template>
   <confirmation-dialog
+    ref="deleteConfirmationDialog"
+    confirmationBtn="Delete account"
+    :msg="`Do you really want to delete your account?`"
+    @confirmed="deleteAccountConfirmed"
+  >
+  </confirmation-dialog>
+
+  <confirmation-dialog
     ref="confirmationLeaveDialog"
     confirmationBtn="Discard changes and leave"
     msg="Do you really want to leave? You have unsaved changes!"
@@ -164,5 +190,6 @@ onBeforeRouteLeave((to, from, next) => {
     :inserting="inserting(id)"
     @save="save"
     @cancel="cancel"
+    @delete="deleteAccount"
   ></user-detail>
 </template>

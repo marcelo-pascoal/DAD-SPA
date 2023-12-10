@@ -3,7 +3,7 @@ import { ref, watch, computed, inject } from "vue";
 import avatarNoneUrl from '@/assets/avatar-none.png'
 
 const serverBaseUrl = inject("serverBaseUrl");
-const emit = defineEmits(["save", "cancel"]);
+const emit = defineEmits(["save", "cancel", "delete"]);
 
 const props = defineProps({
   type: {
@@ -91,18 +91,12 @@ const cancel = () => {
 }
 
 const deleteAccount = () => { 
-    deleteConfirmationDialog.value.show()
+  emit("delete",)
 }
+
 </script>
 
 <template>
-  <confirmation-dialog
-    ref="deleteConfirmationDialog"
-    confirmationBtn="Delete administrator"
-    :msg="`Do you really want to delete your account?`"
-    @confirmed="deleteUserConfirmed"
-  >
-  </confirmation-dialog>
   <form class="row g-3 needs-validation" novalidate @submit.prevent="save">
     <h3 class="mt-5 mb-3">{{ userTitle }}</h3>
     <hr/>

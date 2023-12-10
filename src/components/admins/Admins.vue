@@ -3,7 +3,7 @@
   import { useToast } from "vue-toastification"
   import { useRouter } from 'vue-router'
   import { ref, computed, onMounted, inject } from 'vue'
-  import UserTable from "./UserTable.vue"
+  import AdminTable from "./AdminTable.vue"
 
   const toast = useToast()
   const router = useRouter()
@@ -90,12 +90,12 @@
   </div>
 </div>
   <hr>
-  <user-table
+  <admin-table
     :users="users"
     :showId="false"
     @edit="editUser"
     @delete="deleteUser"
-  ></user-table>
+  ></admin-table>
 </template>
 
 <style scoped>

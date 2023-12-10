@@ -86,7 +86,7 @@ onMounted(async () => {
     <div class="d-flex flex-wrap justify-content-between">
       <div class="mb-3 me-3 flex-grow-1">
         <label for="selectName" class="form-label" >Filter by name:</label>
-        <input ref="categoryinput" type="text" class="form-control" v-model="filterByName">
+        <input id="selectName" ref="categoryinput" type="text" class="form-control" v-model="filterByName">
       </div>
       <div class="mb-3 ms-xs-3 flex-grow-1">
         <label for="selectType" class="form-label">Filter by type:</label>

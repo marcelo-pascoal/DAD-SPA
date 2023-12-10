@@ -21,15 +21,17 @@ const fetchCards = async () => {
 
 const updateCard = async (vcard) => {
   await axios.put(`/vcards/${vcard.phone_number}`, vcard)
+    toast.info(`vCard ${vcard.phone_number} was updated`)
+    socket.emit('updatedVcard', vcard)
   fetchCards()
 }
 
 const deleteCard = async (vcard) => {
     await axios.delete(`/vcards/${vcard.phone_number}`);
+    toast.info(`vCard ${vcard.phonoe_number} was deleted`)
+    socket.emit('deletedVcard', vcard)
     fetchCards();
 }
-
-
 
 onMounted(() => {
     fetchCards()
@@ -37,6 +39,9 @@ onMounted(() => {
 
 socket.on('updatedVcard', () => {
     toast.info("vCard list has been changed")
+    fetchCards()
+})
+socket.on('insertedVcard', (insertedVcard) => {
     fetchCards()
 })
 

@@ -71,7 +71,7 @@ const save = async (userToSave) => {
       }
       else {
         response = await axios.post('vcards', userToSave)
-        socket.emit('insertedVcard', response.data)
+        socket.emit('insertedVcard', response.data.data)
       }
       user.value = response.data.data
       originalValueStr = JSON.stringify(user.value)

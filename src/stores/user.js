@@ -90,15 +90,20 @@ export const useUserStore = defineStore('user', () => {
         return false
     }
 
-        socket.on('insertedVcard', (insertedVcard) => {
-            console.log(insertedVcard)
-            toast.info(`vCard #${insertedVcard.phone_number} (${insertedVcard.name}) has registered successfully!`)
-        })
+    
+    socket.on('insertedVcard', (insertedVcard) => {
+        toast.info(`vCard #${insertedVcard.phone_number} (${insertedVcard.name}) has registered successfully!`)
+    })
 
     socket.on('updatedAdmin', (updatedAdmin) => {
-        if (user.value?.id == updatedAdmin.id) {
-            user.value = updatedAdmin
-            toast.info('Your admin profile has been changed!')
+        toast.info(`Admin profile #${updatedAdmin.id} (${updatedAdmin.name}) has changed!`)
+    })
+
+    socket.on('updatedVcard', (vcard) => {
+        console.log(vcard)
+        if (user.value?.id == vcard.phone_number) {
+            loadUser()
+            toast.info('Your profile has been changed!')
         } 
         else {
             toast.info(`Admin profile #${updatedAdmin.id} (${updatedAdmin.name}) has changed!`)

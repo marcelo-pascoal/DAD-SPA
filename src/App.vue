@@ -27,7 +27,6 @@ const clickMenuOption = () => {
 }
 </script>
 
-
 <template>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top flex-md-nowrap p-0 shadow">
     <div class="container-fluid">
@@ -35,6 +34,10 @@ const clickMenuOption = () => {
         <img src="@/assets/logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
         vCard
       </router-link>
+      <div class="balance" v-if="userStore.user?.user_type == 'V'">
+        <label for="accountBalance">Balance:</label>
+        <input type="text" id="accountBalance" v-model="userStore.accountBalance" readonly>
+      </div>
       <button id="buttonSidebarExpandId" class="navbar-toggler" type="button" data-bs-toggle="collapse"
         data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -233,4 +236,9 @@ body {
 .container{
         max-width: none;
     }
+
+.balance{
+  background-color: lightgrey;
+  padding: 5px;
+}
 </style>

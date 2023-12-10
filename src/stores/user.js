@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 import avatarNoneUrl from '@/assets/avatar-none.png'
 import { useToast } from "vue-toastification"
 import { useRouter, useRoute} from 'vue-router'
+import { useRefHistory } from '@vueuse/core'
 
 export const useUserStore = defineStore('user', () => {
     const socket = inject("socket")
@@ -15,8 +16,9 @@ export const useUserStore = defineStore('user', () => {
 
     const user = ref(null)
 
-
-    const userBlocked = computed(() => user.value?.blocked)
+    const accountBalance = ref(0)
+    const maxDebit = ref(0)
+    
     const userName = computed(() => user.value?.name ?? 'Anonymous')
 
     const userId = computed(() => user.value?.id ?? -1)
@@ -28,10 +30,23 @@ export const useUserStore = defineStore('user', () => {
         ? serverBaseUrl + '/storage/fotos/' + user.value.photo_url
         : avatarNoneUrl)
 
+    async function getFinantialInfo() {
+        try{
+            const response = await axios.get('vcards/'+user.value?.id)
+            console.log(response.data.data.balance)
+            accountBalance.value = response.data.data.balance
+            maxDebit.value = response.data.data.max_debit
+        }   catch (error) {
+            throw error
+        }
+    }
     async function loadUser() {
         try {
             const response = await axios.get('users/me')
             user.value = response.data.data
+            if(user.value.user_type=='V'){
+                getFinantialInfo()
+            }
         } catch (error) {
             clearUser()
             throw error
@@ -140,6 +155,9 @@ export const useUserStore = defineStore('user', () => {
         login,
         logout,
         restoreToken,
-        changePassword
+        changePassword,
+        getFinantialInfo,
+        accountBalance,
+        maxDebit
     }
 })

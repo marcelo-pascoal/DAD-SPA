@@ -89,9 +89,20 @@ const save = () => {
 const cancel = () => {
   emit("cancel", editingUser.value);
 }
+
+const deleteAccount = () => { 
+    deleteConfirmationDialog.value.show()
+}
 </script>
 
 <template>
+  <confirmation-dialog
+    ref="deleteConfirmationDialog"
+    confirmationBtn="Delete administrator"
+    :msg="`Do you really want to delete your account?`"
+    @confirmed="deleteUserConfirmed"
+  >
+  </confirmation-dialog>
   <form class="row g-3 needs-validation" novalidate @submit.prevent="save">
     <h3 class="mt-5 mb-3">{{ userTitle }}</h3>
     <hr/>
@@ -161,7 +172,7 @@ const cancel = () => {
     </div>
     <hr/>
     <div class="mt-2 d-flex justify-content-end">
-      <button type="button" class="btn btn-danger px-5 mx-2" @click="save">Delete Account</button>
+      <button type="button" class="btn btn-danger px-5 mx-2" @click="deleteAccount">Delete Account</button>
       <button type="button" class="btn btn-primary px-5 mx-2" @click="save">Save</button>
       <button type="button" class="btn btn-light px-5 mx-2" @click="cancel">Cancel</button>
     </div>

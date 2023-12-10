@@ -19,12 +19,11 @@
   })
 
   const loadUsers = async () => {
-      try {
-        const response = await axios.get('users')
+    try {
+      const response = await axios.get('users')
       users.value = response.data.data
-
     } catch (error) {
-      console.log(error)
+        console.log(error)
     }
   }
 
@@ -45,6 +44,7 @@
     try {
       await axios.delete(`/users/${userToDelete.value.id}`)
       toast.info(`Administrator ${userToDeleteDescription.value} was deleted`)
+      socket.emit('deletedUser', userToDelete.value)
       loadUsers()
     } catch (error) {
       console.log(error)
@@ -60,13 +60,11 @@
     loadUsers()
   })
 
-  socket.on('insertedUser', () => {
+  socket.on('usersUpdated', () => {
+    toast.info("Admin list has been changed")
     loadUsers()
   })
 
-  socket.on('updatedUser', () => {
-    loadUsers()
-  })
 </script>
 
 <template>

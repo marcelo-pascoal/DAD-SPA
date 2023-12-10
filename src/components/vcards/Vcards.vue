@@ -1,33 +1,45 @@
 <script setup>
+import { useToast } from "vue-toastification"
 import VcardList from './VcardList.vue'
 import { ref, inject, onMounted } from 'vue'
 import axios from 'axios';
+
+const socket = inject("socket")
+
+const toast = useToast()
 
 const serverBaseUrl = inject("serverBaseUrl");
 
 const vcards = ref([])
 
 const fetchCards = async () => {
-    const response = await axios.get('/vcards')
-    vcards.value = response.data.data
-}
-
-const deleteCard = async (vcard) => {
-    await axios.delete(`${serverBaseUrl}/vcards/${vcard.phone_number}`);
-    refresh();
+    try {
+        const response = await axios.get('/vcards')
+        vcards.value = response.data.data
+    } catch (error) {
+        console.log(error)
+  }
 }
 
 const updateCard = async (vcard) => {
   await axios.put(`${config.baseAPI}/vcards/${vcard.phone_number}`, vcard)
-  refresh()
-}
-
-const refresh = () => {
   fetchCards()
 }
 
+const deleteCard = async (vcard) => {
+    await axios.delete(`/vcards/${vcard.phone_number}`);
+    fetchCards();
+}
+
+
+
 onMounted(() => {
-  refresh()
+    fetchCards()
+})
+
+socket.on('updatedVcard', () => {
+    toast.info("vCard list has been changed")
+    fetchCards()
 })
 
 </script>
@@ -35,17 +47,7 @@ onMounted(() => {
 <template>
     <br>
     <div class="container border">
-        <div class="d-flex">
-            <div class="flex-grow-1">
-                <h4 class="mt-3">[Vcards.vue]</h4>
-            </div>
-            <div class="flex-grow-0 d-flex flex-column justify-content-end">
-                <button type="button" class="btn btn-dark" @click="refresh">
-                    <i class="bi-repeat" aria-hidden="true"></i> Refresh
-                </button>
-            </div>
-        </div>
-        <hr>
+        <h3 class="mt-5 mb-3">vCards</h3>
             <div>
         <ul class="list-group">
             <VcardList v-for="vcard in vcards" :key="vcard.phone_number" 

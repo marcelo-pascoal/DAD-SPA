@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', () => {
 
     const userId = computed(() => user.value?.id ?? -1)
 
-    const userType = computed(() => user.value?.type ?? 'V')
+    const userType = computed(() => user.value?.user_type ?? 'V')
 
     const userPhotoUrl = computed(() => 
         user.value?.photo_url
@@ -90,16 +90,19 @@ export const useUserStore = defineStore('user', () => {
         return false
     }
 
-    socket.on('insertedUser', (insertedUser) => {
-        toast.info(`User #${insertedUser.id} (${insertedUser.name}) has registered successfully!`)
-    })
+        socket.on('insertedVcard', (insertedVcard) => {
+            console.log(insertedVcard)
+            toast.info(`vCard #${insertedVcard.phone_number} (${insertedVcard.name}) has registered successfully!`)
+        })
 
     socket.on('updatedUser', (updatedUser) => {
         if (user.value?.id == updatedUser.id) {
             user.value = updatedUser
             toast.info('Your user profile has been changed!')
         } else {
-            toast.info(`User profile #${updatedUser.id} (${updatedUser.name}) has changed!`)
+            if(userType=='A'){
+                toast.info(`User profile #${updatedUser.id} (${updatedUser.name}) has changed!`)
+            }
         }
     })
 

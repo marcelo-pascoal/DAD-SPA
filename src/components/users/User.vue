@@ -67,9 +67,12 @@ const save = async (userToSave) => {
     try {
       if (props.type=='admin'){
         response = await axios.post('users', userToSave)
-        socket.emit('insertedUser', user.value)
+        socket.emit('insertedUser', response.data.data)
       }
-      else response = await axios.post('vcards', userToSave)
+      else {
+        response = await axios.post('vcards', userToSave)
+        socket.emit('insertedVcard', response.data)
+      }
       user.value = response.data.data
       originalValueStr = JSON.stringify(user.value)
       toast.success('Registration successfull.')

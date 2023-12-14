@@ -175,7 +175,7 @@ onBeforeRouteLeave((to, from, next) => {
   
   nextCallBack = null
   let newValueStr = JSON.stringify(user.value)
-  if (originalValueStr != newValueStr) {
+  if (userStore.userId != -1 && originalValueStr != newValueStr) {
     confirmedHandler.value='leave'
     confirmationBtn.value ='Discard changes and leave'
     msg.value='Do you really want to leave? You have unsaved changes!' 

@@ -5,7 +5,7 @@ import { useUserStore } from "../../stores/user.js"
 import { useTransactionsStore } from "../../stores/transactions.js"
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
-import { ref, watch, computed, inject} from 'vue'
+import { ref, watch, computed, inject, onMounted} from 'vue'
 import TransactionDetail from "./TransactionDetail.vue"
 
 
@@ -32,7 +32,7 @@ const transaction = ref(newTransaction())
 const errors = ref(null)
 const confirmationLeaveDialog = ref(null)
 
-let originalValueStr = ''
+let originalValueStr = JSON.stringify(transaction.value)
 
 const loadTransaction = async (id) => {
     originalValueStr = ''
@@ -122,15 +122,20 @@ const leaveConfirmed = () => {
 onBeforeRouteLeave((to, from, next) => {
   nextCallBack = null
   let newValueStr = JSON.stringify(transaction.value)
-  if (originalValueStr != newValueStr) {
+  if (userStore.userId != -1 && originalValueStr != newValueStr) {
     // Some value has changed - only leave after confirmation
     nextCallBack = next
     confirmationLeaveDialog.value.show()
-  } else {
+  } else { 
     // No value has changed, so we can leave the component without confirming
     next()
   }
 }) 
+
+onMounted(() =>{
+  originalValueStr=JSON.stringify(transaction.value)
+})
+
 </script>
 
 <template>

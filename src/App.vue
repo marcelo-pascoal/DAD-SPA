@@ -179,6 +179,14 @@ const clickMenuOption = () => {
                     </router-link>
                   </li>
                   <li>
+                    <router-link class="dropdown-item" :class="{ active: $route.name === 'ChangeConfirmationCode' }"
+                                  :to="{ name: 'ChangeConfirmationCode' }" @click="clickMenuOption">
+                      <i class="bi bi-key-fill"></i>
+                      Change confirmation code
+                    </router-link>
+                  </li>
+                  
+                  <li>
                     <hr class="dropdown-divider">
                   </li>
                   <li>

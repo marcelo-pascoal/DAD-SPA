@@ -97,6 +97,19 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    async function changeConfirmationCode(credentials) {
+        console.log (userType.value)
+        if (userType.value != 'V') {
+            throw 'Only vCard can change the confirmation code!'
+        }
+        try {
+            await axios.patch(`vcards/${user.value.id}/confirmation_code`, credentials)
+            return true
+        } catch (error) {
+            throw error
+        }
+    }
+
     async function restoreToken () {
         let storedToken = sessionStorage.getItem('token')
         if (storedToken) {
@@ -161,6 +174,7 @@ export const useUserStore = defineStore('user', () => {
         logout,
         restoreToken,
         changePassword,
+        changeConfirmationCode,
         getFinantialInfo,
         accountBalance,
         maxDebit

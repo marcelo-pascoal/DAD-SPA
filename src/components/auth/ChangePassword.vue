@@ -56,7 +56,7 @@ const changePassword = async () => {
     </div>
     <div class="mb-3">
       <div class="mb-3">
-        <label for="inputPasswordConfirm" class="form-label">Password Confirmation</label>
+        <label for="inputPasswordConfirm" class="form-label">Confirm Password</label>
         <input type="password" class="form-control" id="inputPasswordConfirm" required
           v-model="passwords.password_confirmation">
         <field-error-message :errors="errors" fieldName="password_confirmation"></field-error-message>

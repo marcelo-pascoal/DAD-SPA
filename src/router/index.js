@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import Dashboard from "../components/Dashboard.vue"
 import Login from "../components/auth/Login.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
+import ChangeConfirmationCode from "../components/auth/ChangeConfirmationCode.vue"
 import User from "../components/users/User.vue"
 import Admins from "../components/users/admins/Admins.vue"
 import Vcards from '../components/users/vcards/Vcards.vue'
@@ -46,6 +47,11 @@ const router = createRouter({
       path: '/password',
       name: 'ChangePassword',
       component: ChangePassword
+    },
+    {
+      path: '/code',
+      name: 'ChangeConfirmationCode',
+      component: ChangeConfirmationCode
     },
     {
       path: '/dashboard',

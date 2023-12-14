@@ -2,7 +2,7 @@
 import axios from 'axios'
 import { useToast } from "vue-toastification"
 import { useUserStore } from '../../stores/user.js'
-import { ref, watch, inject} from 'vue'
+import { ref, watch, inject, onMounted} from 'vue'
 import UserDetail from "./UserDetail.vue"
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
@@ -40,7 +40,9 @@ const newUser = () => {
 const user = ref(newUser())
 const errors = ref(null)
 const confirmationLeaveDialog = ref(null)
-const deleteConfirmationDialog = ref(null)
+const confirmationBtn = ref('')
+const msg= ref('')
+const confirmedHandler = ref('')
 
 let originalValueStr = ''
 
@@ -66,18 +68,29 @@ const save = async (userToSave) => {
   let response = null
   if (inserting(props.id)) {
     try {
+      originalValueStr = JSON.stringify(user.value)
       if (props.type=='admin'){
         response = await axios.post('users', userToSave)
         socket.emit('insertedAdmin', response.data.data)
+        toast.success('New admin account created.')
+        router.back()
       }
       else {
+        const credentials = {
+            username: userToSave.phone_number,
+            password: userToSave.password
+        }
         response = await axios.post('vcards', userToSave)
         socket.emit('insertedVcard', response.data.data)
-      }
-      user.value = response.data.data
-      originalValueStr = JSON.stringify(user.value)
-      toast.success('Registration successfull.')
-      router.back()
+        toast.success('Registration successfull.')
+        if (await userStore.login(credentials)) {
+          toast.success('User ' + userStore.user.name + ' has entered the application.')
+        } else {
+          toast.error('Login failed!')
+        }
+        user
+        router.push({ name: 'home' })
+      }      
     } catch (error) {
       console.log(error)
       if (error.response.status == 422) {
@@ -116,23 +129,6 @@ const save = async (userToSave) => {
   }
 }
 
-const deleteAccount = () => { 
-    deleteConfirmationDialog.value.show()
-}
-
-const deleteAccountConfirmed = async () => {
-  try {
-    await axios.delete(`/users/${userStore.userId}`)
-    toast.warning(`You account has been deleted!`)
-    userStore.userType == 'V' ? socket.emit('deletedVcard', userStore.user) : socket.emit('deletedAdmin', userStore.user)
-    userStore.clearUser()
-    router.push({ name: 'home' })
-  } catch (error) {
-    console.log(error)
-    toast.error(`It was not possible to delete your Account!`)
-  }  
-}
-
 const cancel = () => {
   originalValueStr = JSON.stringify(user.value)
   router.back()
@@ -147,38 +143,60 @@ watch(
 )
 
 let nextCallBack = null
-const leaveConfirmed = () => {
-  if (nextCallBack) {
-    nextCallBack()
+
+const leaveConfirmed = async () => {
+  if (confirmedHandler.value=='leave'){
+      if (nextCallBack) {
+      nextCallBack()
+    }
+  }else{
+    try {
+    originalValueStr = JSON.stringify(user.value)
+    await axios.delete(`/users/${userStore.userId}`)
+    toast.warning(`You account has been deleted!`)
+    userStore.userType == 'V' ? socket.emit('deletedVcard', userStore.user) : socket.emit('deletedAdmin', userStore.user)
+    userStore.clearUser()
+    router.push({ name: 'home' })
+  } catch (error) {
+    console.log(error)
+    toast.error(`It was not possible to delete your Account!`)
+  } 
   }
 }
 
+const deleteAccount = () => {
+    confirmedHandler.value='delete'
+    confirmationBtn.value ='Delete account'
+    msg.value='Do you really want to delete your account?'
+    confirmationLeaveDialog.value.show()
+}
+
 onBeforeRouteLeave((to, from, next) => {
+  
   nextCallBack = null
   let newValueStr = JSON.stringify(user.value)
   if (originalValueStr != newValueStr) {
+    confirmedHandler.value='leave'
+    confirmationBtn.value ='Discard changes and leave'
+    msg.value='Do you really want to leave? You have unsaved changes!' 
     nextCallBack = next
     confirmationLeaveDialog.value.show()
   } else {
     next()
   }
 })
+onMounted(() =>{
+  originalValueStr=JSON.stringify(user.value)
+})
+
 
 </script>
 
 <template>
   <confirmation-dialog
-    ref="deleteConfirmationDialog"
-    confirmationBtn="Delete account"
-    :msg="`Do you really want to delete your account?`"
-    @confirmed="deleteAccountConfirmed"
-  >
-  </confirmation-dialog>
-
-  <confirmation-dialog
     ref="confirmationLeaveDialog"
-    confirmationBtn="Discard changes and leave"
-    msg="Do you really want to leave? You have unsaved changes!"
+    :confirmationBtn=confirmationBtn
+    :msg=msg
     @confirmed="leaveConfirmed"
   >
   </confirmation-dialog>

@@ -81,6 +81,13 @@ const clickMenuOption = () => {
                   Change password
                 </router-link>
               </li>
+              <li v-if="userStore.userType == 'V'">
+                <router-link class="dropdown-item" :class="{ active: $route.name === 'ChangeConfirmationCode' }"
+                              :to="{ name: 'ChangeConfirmationCode' }" @click="clickMenuOption">
+                  <i class="bi bi-key-fill"></i>
+                  Change confirmation code
+                </router-link>
+              </li>
               <li>
                 <hr class="dropdown-divider">
               </li>
@@ -178,7 +185,7 @@ const clickMenuOption = () => {
                       Change password
                     </router-link>
                   </li>
-                  <li>
+                  <li v-if="userStore.userType == 'V'">
                     <router-link class="dropdown-item" :class="{ active: $route.name === 'ChangeConfirmationCode' }"
                                   :to="{ name: 'ChangeConfirmationCode' }" @click="clickMenuOption">
                       <i class="bi bi-key-fill"></i>

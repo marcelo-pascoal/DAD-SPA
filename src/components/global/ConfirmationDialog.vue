@@ -16,10 +16,23 @@ const props = defineProps({
     msg: {
         type: String,
         default: "",
+    }, 
+    showPassword: {
+        type: Boolean,
+        default: true,
+    }, 
+    showCode: {
+        type: Boolean,
+        default: true,
     }
 })
 
 const emit = defineEmits(["show", "hide", "confirmed"])
+
+const credentials = ref({
+      password: '',
+      confirmation_code: ''
+  })
 
 const hiddenButtonToShowDialog = ref(null)
 const hiddenButtonToHideDialog = ref(null)
@@ -36,7 +49,7 @@ const hide = () => {
 }
 const clickConfirm = () => {
     hide()
-    emit("confirmed")
+    emit("confirmed", credentials.value)
 }
 
 // Properties/Methods that are exposed to the outside when
@@ -64,11 +77,26 @@ defineExpose({ show, hide })
                 </div>
                 <div class="modal-body">
                     {{ msg }}
+                    <div class="d-flex">
+                        <div v-if="showPassword">
+                            <hr>
+                            <label for="inputPassword" class="form-label">Password</label>
+                            <input id="inputPassword" type="password" class="form-control"
+                                v-model="credentials.password"/>
+                        </div>
+                        <div v-if="showPassword">
+                            <hr>
+                            <label for="inputConfirmationCode" class="form-label">Secret Code</label>
+                            <input id="inputConfirmationCode" type="password" class="form-control"
+                                v-model="credentials.confirmation_code"/>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ cancelBtn }}
                     </button>
+                    
                     <button type="button" class="btn btn-primary" @click="clickConfirm">
                         {{ confirmationBtn }}
                     </button>

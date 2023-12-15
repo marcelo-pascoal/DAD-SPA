@@ -165,8 +165,8 @@ const deleteAccount = () => {
       </div>
     </div>
     <hr/>
-    <div class="mt-2 d-flex justify-content-end">
-      <button type="button" class="btn btn-danger px-5 mx-2" @click="deleteAccount" v-if="!props.inserting">Delete Account</button>
+    <div class="mt-2 d-flex justify-content-end" >
+      <button type="button" class="btn btn-danger px-5 mx-2" @click="deleteAccount" v-if="!props.inserting && props.type=='vcard'">Delete Account</button>
       <button type="button" class="btn btn-primary px-5 mx-2" @click="save">Save</button>
       <button type="button" class="btn btn-light px-5 mx-2" @click="cancel">Cancel</button>
     </div>

@@ -144,23 +144,25 @@ watch(
 
 let nextCallBack = null
 
-const leaveConfirmed = async () => {
+const leaveConfirmed = async (credentials) => {
   if (confirmedHandler.value=='leave'){
       if (nextCallBack) {
       nextCallBack()
     }
   }else{
     try {
+      console.log(credentials)
+      console.log(credentials.data)
     originalValueStr = JSON.stringify(user.value)
-    await axios.delete(`/users/${userStore.userId}`)
+    await axios.delete(`/vcards/${userStore.userId}`, { params: credentials });
     toast.warning(`You account has been deleted!`)
-    userStore.userType == 'V' ? socket.emit('deletedVcard', userStore.user) : socket.emit('deletedAdmin', userStore.user)
+    socket.emit('deletedVcard', userStore.user)
     userStore.clearUser()
     router.push({ name: 'home' })
-  } catch (error) {
-    console.log(error)
-    toast.error(`It was not possible to delete your Account!`)
-  } 
+    } catch (error) {
+      console.log(error)
+      toast.error(`It was not possible to delete your Account!`)
+    } 
   }
 }
 

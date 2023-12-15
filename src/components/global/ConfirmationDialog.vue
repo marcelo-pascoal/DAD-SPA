@@ -80,14 +80,14 @@ defineExpose({ show, hide })
                     <div class="d-flex">
                         <div v-if="showPassword">
                             <hr>
-                            <label for="inputPassword" class="form-label">Password</label>
-                            <input id="inputPassword" type="password" class="form-control"
+                            <label for="inputPasswordD" class="form-label">Password</label>
+                            <input id="inputPasswordD" type="password" class="form-control"
                                 v-model="credentials.password"/>
                         </div>
                         <div v-if="showPassword">
                             <hr>
-                            <label for="inputConfirmationCode" class="form-label">Secret Code</label>
-                            <input id="inputConfirmationCode" type="password" class="form-control"
+                            <label for="inputConfirmationCodeD" class="form-label">Secret Code</label>
+                            <input id="inputConfirmationCodeD" type="password" class="form-control"
                                 v-model="credentials.confirmation_code"/>
                         </div>
                     </div>

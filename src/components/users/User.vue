@@ -31,7 +31,7 @@ const newUser = () => {
       password: '',
       password_confirmation: '',
       phone_number: '',
-      photo_url: '',
+      photo_url: null,
       confirmation_code: '',
       confirmation_code_conf: '',
     }
@@ -102,21 +102,18 @@ const save = async (userToSave) => {
     }
   } else {
     try {
-      /////////////
-      response = await axios.put('users/' + props.id, userToSave)
-      user.value = response.data.data
-      /////////////
-      originalValueStr = JSON.stringify(user.value)
-      toast.success('Updated successfull.')
-      if (user.value.id == userStore.userId) {
-        await userStore.loadUser()
-      }
+
       if (props.type=='admin'){
+        response = await axios.put('users/' + props.id, userToSave)
+        await userStore.loadUser()
         socket.emit('updatedAdmin', user.value)
-      }
-      else{
+      }else{
+        response = await axios.put('vcards/' + props.id, userToSave)
+        await userStore.loadUser()
         socket.emit('updatedVcard', user.value)
       }
+      originalValueStr = JSON.stringify(user.value)
+      toast.success('Updated successfull.')
       router.back()
     } catch (error) {
       if (error.response.status == 422) {
@@ -151,8 +148,6 @@ const leaveConfirmed = async (credentials) => {
     }
   }else{
     try {
-      console.log(credentials)
-      console.log(credentials.data)
     originalValueStr = JSON.stringify(user.value)
     await axios.delete(`/vcards/${userStore.userId}`, { params: credentials });
     toast.warning(`You account has been deleted!`)
@@ -187,6 +182,7 @@ onBeforeRouteLeave((to, from, next) => {
     next()
   }
 })
+
 onMounted(() =>{
   originalValueStr=JSON.stringify(user.value)
 })

@@ -74,7 +74,13 @@ export const useCategoriesStore = defineStore('categories', () => {
     }
 
     async function updateCategory(updateCategory) {
-        const response = await axios.put('categories/' + updateCategory.id, updateCategory)
+        let response = null;
+        if(userStore.userType ==='V') {
+            response = await axios.put('categories/' + updateCategory.id, updateCategory)
+        } 
+        else {
+            response = await axios.put('categories/default/' + updateCategory.id, updateCategory)
+        } 
         updateCategoryOnArray(response.data.data)
         socket.emit('updateCategory', response.data.data)
         return response.data.data

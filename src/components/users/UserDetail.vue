@@ -3,13 +3,12 @@ import { ref, watch, computed, inject } from "vue";
 import avatarNoneUrl from '@/assets/avatar-none.png'
 
 const serverBaseUrl = inject("serverBaseUrl");
-const emit = defineEmits(["save", "cancel", "delete"]);
 
 const props = defineProps({
   type: {
       type: String,
       default: null
-    },
+  },
   user: {
     type: Object,
     required: true,
@@ -23,21 +22,22 @@ const props = defineProps({
     required: false,
   },
 });
+
+const emit = defineEmits(["save", "cancel", "delete"]);
+
 const editingUser = ref(props.user)
+
 const inputPhotoFile = ref(null)
 const editingImageAsBase64 = ref(null)
 const deletePhotoOnTheServer = ref(false)
 
 watch(
-  () => props.user, (newUser) => {editingUser.value = newUser},{ immediate: true }
+  () => props.user,
+  (newUser) => {
+    editingUser.value = newUser
+  },
+  { immediate: true }
 )
-
-const userTitle = computed(()=>{
-  if (!editingUser.value) {
-    return ''
-  }
-  return props.inserting ? 'Register a new ' + props.type : props.type + ' Profile'
-})
 
 const photoFullUrl = computed(() => {
   if (deletePhotoOnTheServer.value) {
@@ -52,6 +52,32 @@ const photoFullUrl = computed(() => {
   }
 })
 
+const userTitle = computed(()=>{
+  if (!editingUser.value) {
+    return ''
+  }
+  return props.inserting ? 'Register a new ' + props.type : props.type + ' Profile'
+})
+
+const save = () => {
+  const userToSave = editingUser.value
+  console.log(userToSave)
+  userToSave.deletePhotoOnServer = deletePhotoOnTheServer.value
+  userToSave.base64ImagePhoto = editingImageAsBase64.value
+  if(!props.inserting){
+    userToSave.phone_number=editingUser.value.id
+  }
+  emit("save", userToSave);
+}
+
+const cancel = () => {
+  emit("cancel", editingUser.value);
+}
+
+const deleteAccount = () => { 
+  emit("delete",)
+}
+
 const changePhotoFile = () => {
   try {
     const file = inputPhotoFile.value.files[0]
@@ -59,9 +85,15 @@ const changePhotoFile = () => {
       editingImageAsBase64.value = null
     } else {
       const reader = new FileReader()
-      reader.addEventListener('load', () => {
+      reader.addEventListener(
+          'load',
+          () => {
+            // convert image file to base64 string
             editingImageAsBase64.value = reader.result
-            deletePhotoOnTheServer.value = false}, false,)
+            deletePhotoOnTheServer.value = false
+          },
+          false,
+      )
       if (file) {
         reader.readAsDataURL(file)
       }
@@ -79,19 +111,6 @@ const resetToOriginalPhoto = () => {
 
 const cleanPhoto = () => {
   deletePhotoOnTheServer.value = true
-}
-
-const save = () => {
-  const userToSave = editingUser.value
-  emit("save", userToSave);
-}
-
-const cancel = () => {
-  emit("cancel", editingUser.value);
-}
-
-const deleteAccount = () => { 
-  emit("delete",)
 }
 
 </script>
@@ -147,7 +166,7 @@ const deleteAccount = () => {
       </div>
       <div class="w-25" v-if="props.type=='vcard'">
         <div class="d-flex flex-column">
-          <label class="form-label" for="inputPhoto">Photo</label>
+          <label class="form-label">Photo</label>
           <div class="form-control text-center" >
             <img :src="photoFullUrl" class="w-100" />
           </div>

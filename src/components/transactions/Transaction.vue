@@ -66,6 +66,8 @@ const save = async () => {
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
         toast.error('Transaction was not created due to validation errors!')
+      } else if(error.response.status == 491){
+        toast.error('Transaction was rejected. \n'+error.response.data.message)
       } else {
         toast.error('Transaction was not created due to unknown server error!')
       }

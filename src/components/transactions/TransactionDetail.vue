@@ -54,7 +54,7 @@
   }
 
   const isValidReference = computed(()=>{
-    if(editingTransaction.value.value >= 0.01 && editingTransaction.value.value <= userStore.accountBalance && editingTransaction.value.value <= userStore.maxDebit){
+    if(editingTransaction.value.value >= 0.01 && (userStore.userType =='A' || (editingTransaction.value.value <= userStore.accountBalance && editingTransaction.value.value <= userStore.maxDebit))){
       const reference = editingTransaction.value.payment_reference;
 
       switch (editingTransaction.value.payment_type) {

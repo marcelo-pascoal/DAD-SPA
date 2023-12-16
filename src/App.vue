@@ -144,6 +144,13 @@ const clickMenuOption = () => {
                   Categories
                 </router-link>
             </li>
+            <li class="nav-item">
+                <router-link class="nav-link" :class="{ active: $route.name === 'Statistics' }"
+                            :to="{ name: 'Statistics' }" @click="clickMenuOption">
+                  <i class="bi bi-list-stars"></i>
+                  Statistics
+                </router-link>
+            </li>			
           </ul>
           <div class="d-block d-md-none">
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">

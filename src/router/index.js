@@ -11,6 +11,7 @@ import Vcards from '../components/users/vcards/Vcards.vue'
 import Transactions from '../components/transactions/Transactions.vue'
 import Transaction from  '../components/transactions/Transaction.vue'
 import Blocked from  '../views/Blocked.vue'
+import Statistics from  '../components/statistics/chart.vue'
 
 import Categories from '../components/categories/Categories.vue'
 
@@ -111,6 +112,11 @@ const router = createRouter({
       //props: true
       // Replaced with the following line to ensure that id is a number
       props: route => ({ id: parseInt(route.params.id), type: 'admin' })
+    },
+	{
+      path: '/statistics',
+      name: 'Statistics',
+      component: Statistics
     },
   ]
 })

@@ -41,14 +41,43 @@ export const useTransactionsStore = defineStore('transactions', () => {
         transactions.value = []
     }
 
-    async function loadTransactions() {
+	async function loadTransactions(type = null, pair_vcard = null, min = null, max = null, category_id = null) {
+	  try {
+		const params = {};
+		if (type !== null) {
+		  params.type = type;
+		}
+		if (pair_vcard !== null) {
+		  params.pair_vcard = pair_vcard;
+		}
+		if (min !== null) {
+		  params.min = min;
+		}
+		if (max !== null) {
+		  params.max = max;
+		}
+		if (category_id !== null) {
+		  params.category_id = category_id;
+		}
+		const response = await axios.get('transactions', {
+		  params,
+		});
+		transactions.value = response.data.data;
+		return transactions.value;
+	  } catch (error) {
+		clearTransactions();
+		throw error;
+	  }
+	}
+	
+	async function loadAllTransactions() {
         try {
-            const response = await axios.get('transactions')
-            transactions.value = response.data.data
-            return transactions.value
+            const response = await axios.get('transactions/all');
+            transactions.value = response.data.data;
+            return transactions.value;
         } catch (error) {
-            clearTransactions()
-            throw error
+            clearTransactions();
+            throw error;
         }
     }
 
@@ -83,6 +112,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
         getTransactionsByFilter,
         getTransactionsByFilterTotal,
         loadTransactions,
+		loadAllTransactions,
         clearTransactions,
         insertTransaction,
         updateTransaction,

@@ -1,9 +1,10 @@
 <script setup>
-import { ref, onMounted, watchEffect } from 'vue';
+import { ref, onMounted, watchEffect , inject} from 'vue';
 import { Bar, Line, Pie } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PieController, LineController, LineElement, PointElement } from 'chart.js';
-import axios from 'axios';
 import { useTransactionsStore } from '../../stores/transactions.js';
+
+const axios = inject("axios")
 
 ChartJS.register(
   Title,

@@ -3,9 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-icons/font/bootstrap-icons.css"
 import "bootstrap"
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import axios from 'axios'
+import { createApp} from 'vue'
+import { createPinia } from 'pinia'
 import { io } from "socket.io-client"
 import Toast from "vue-toastification"
 // Import the Toast CSS (or use your own)!
@@ -18,14 +18,22 @@ import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
+const apiDomain = import.meta.env.VITE_API_DOMAIN
+const wsConnection = import.meta.env.VITE_WS_CONNECTION
 
-const serverBaseUrl = 'http://vcardapi.test'
-app.provide('serverBaseUrl', serverBaseUrl)
-// Default Axios configuration
-axios.defaults.baseURL = serverBaseUrl + '/api'
-axios.defaults.headers.common['Content-type'] = 'application/json'
-// Provide websocket to all components:
-app.provide('socket', io("http://localhost:8080"))
+app.provide('serverBaseUrl', apiDomain)
+
+app.provide('socket', io(wsConnection))
+
+app.provide(
+    'axios',
+    axios.create({
+      baseURL: apiDomain + '/api',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+  )
 // Default/Global Toast configuration
 app.use(Toast, {
     position: "top-center",

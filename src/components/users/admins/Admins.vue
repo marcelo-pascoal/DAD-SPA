@@ -1,5 +1,4 @@
 <script setup>
-  import axios from 'axios'
   import { useToast } from "vue-toastification"
   import { useRouter } from 'vue-router'
   import { ref, computed, onMounted, inject } from 'vue'
@@ -8,6 +7,8 @@
   const toast = useToast()
   const router = useRouter()
   const socket = inject('socket')
+  
+  const axios = inject("axios")
 
   const userToDelete = ref(null)
   const deleteConfirmationDialog = ref(null)

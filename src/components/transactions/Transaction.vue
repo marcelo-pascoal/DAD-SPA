@@ -1,5 +1,4 @@
 <script setup>
-import axios from 'axios'
 import { useToast } from "vue-toastification"
 import { useUserStore } from "../../stores/user.js"
 import { useTransactionsStore } from "../../stores/transactions.js"
@@ -10,6 +9,8 @@ import TransactionDetail from "./TransactionDetail.vue"
 
 
 const socket = inject("socket")
+
+const axios = inject("axios")
 
 const toast = useToast()
 const router = useRouter()

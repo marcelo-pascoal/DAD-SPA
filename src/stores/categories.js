@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { ref, computed, inject } from 'vue'
 import { defineStore } from 'pinia'
 import { useUserStore } from "./user.js"
@@ -9,7 +8,9 @@ export const useCategoriesStore = defineStore('categories', () => {
     const userStore = useUserStore()
 
     const socket = inject("socket")
-
+    
+    const axios = inject("axios")
+    
     const toast = useToast()
 
     const categories = ref([])

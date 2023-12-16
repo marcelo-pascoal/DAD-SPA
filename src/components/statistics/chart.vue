@@ -1,5 +1,4 @@
 <script setup>
-import config from '../../utils/config.js';
 import { Bar, Line, Pie } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PieController, ArcElement, DoughnutController, LineController, LineElement, PointElement } from 'chart.js';
 import { useTransactionsStore } from "../../stores/transactions.js";

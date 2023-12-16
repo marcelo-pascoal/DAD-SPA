@@ -2,8 +2,8 @@
 import { useToast } from "vue-toastification"
 import Vcard from './Vcard.vue'
 import { ref, inject, onMounted } from 'vue'
-import axios from 'axios';
 
+const axios = inject("axios")
 const socket = inject("socket")
 
 const toast = useToast()

@@ -1,10 +1,10 @@
 <script setup>
-import config from '../../../utils/config.js'
 import VcardDetail from './VcardDetail.vue'
-import {ref, computed} from 'vue'
-import axios from 'axios';
+import {ref, computed, inject} from 'vue'
 
 const cardEdit = ref(null)
+
+const serverBaseUrl = inject('serverBaseUrl')
 
 const props = defineProps({
     vcard: Object,
@@ -12,7 +12,7 @@ const props = defineProps({
 })
 
 const fullDescription = computed(() => props.vcard.phone_number + ' - ' + props.vcard.email + ' :: ' + props.vcard.name)
-const imageUrl = computed( () => config.baseURL + '/storage/fotos/' + props.vcard.photo_url)
+const imageUrl = computed( () => serverBaseUrl + '/storage/fotos/' + props.vcard.photo_url)
 
 const emit = defineEmits([
     'requestRemoveFromList',

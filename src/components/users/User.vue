@@ -1,5 +1,4 @@
 <script setup>
-import axios from 'axios'
 import { useToast } from "vue-toastification"
 import { useUserStore } from '../../stores/user.js'
 import { ref, watch, inject, onMounted} from 'vue'
@@ -8,6 +7,7 @@ import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
 const toast = useToast()
 const socket = inject("socket")
+const axios = inject("axios")
 const router = useRouter()
 const userStore = useUserStore()
 

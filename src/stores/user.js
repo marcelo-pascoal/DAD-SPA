@@ -1,12 +1,11 @@
-import axios from 'axios'
 import { ref, computed, inject } from 'vue'
 import { defineStore } from 'pinia'
 import avatarNoneUrl from '@/assets/avatar-none.png'
 import { useToast } from "vue-toastification"
 import { useRouter, useRoute} from 'vue-router'
-import { useRefHistory } from '@vueuse/core'
 
 export const useUserStore = defineStore('user', () => {
+    const axios = inject("axios")
     const socket = inject("socket")
     const toast = useToast()
 

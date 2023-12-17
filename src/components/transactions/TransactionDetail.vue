@@ -61,6 +61,7 @@
         case "VCARD":
           return /^9\d{8}$/.test(reference);
         case "MBWAY":
+
           return /^9\d{8}$/.test(reference);
         case "PAYPAL":
           return /^xx/.test(reference) && /\S+@\S+\.\S+/.test(reference);
@@ -137,7 +138,7 @@
         <input type="text" class="form-control" :class="{ 'is-invalid': errors ? errors['vcard'] : false }"
           id="inputVcard" required
           v-model="editingTransaction.vcard">
-        <field-error-message :errors="errors" fieldName="category_id"></field-error-message>
+        <field-error-message :errors="errors" fieldName="destination_vcard"></field-error-message>
       </div>
       <div class="mb-3 me-3 flex-grow-1">
         <label for="inputValue" class="form-label">Value</label>

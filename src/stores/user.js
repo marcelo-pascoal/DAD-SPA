@@ -18,6 +18,8 @@ export const useUserStore = defineStore('user', () => {
     const accountBalance = ref(0)
     const maxDebit = ref(0)
 
+    const userBlocked = ref(0)
+   
     const userName = computed(() => user.value?.name ?? 'Anonymous')
 
     const userId = computed(() => user.value?.id ?? -1)
@@ -34,6 +36,7 @@ export const useUserStore = defineStore('user', () => {
             const response = await axios.get('vcards/'+user.value?.id)
             accountBalance.value = response.data.data.balance
             maxDebit.value = response.data.data.max_debit
+            userBlocked.value = response.data.data.blocked
         }   catch (error) {
             throw error
         }
@@ -43,7 +46,7 @@ export const useUserStore = defineStore('user', () => {
             const response = await axios.get('users/me')
             user.value = response.data.data
             if(user.value.user_type=='V'){
-                getFinantialInfo()
+                await getFinantialInfo()
             }
         } catch (error) {
             clearUser()
@@ -129,17 +132,17 @@ export const useUserStore = defineStore('user', () => {
         toast.info(`Admin profile #${admin.id} (${admin.name}) has changed!`)
     })
 
-    socket.on('updatedVcard', (vcard) => {
+    socket.on('updatedVcard', async (vcard) => {
         if (user.value?.id == vcard.phone_number) {
-            loadUser();
-            if(route.name == 'blocked' && !vcard.blocked){
+            await loadUser();
+            if(userBlocked.value){
+                toast.error('Your account has been blocked!')
+                router.push({ name: 'blocked' })
+            }
+            else if(!userBlocked.value && route.name=='blocked'){
                 toast.info('Your account has been unblocked!')
                 router.push({ name: 'Vcard', params: { id: vcard.phone_number } })
                 
-            }
-            else if(vcard.blocked){
-                toast.error('Your account has been blocked!')
-                router.push({ name: 'blocked' })
             }
             else{
             toast.info('Your profile has been altered!')
@@ -175,6 +178,7 @@ export const useUserStore = defineStore('user', () => {
         changeConfirmationCode,
         getFinantialInfo,
         accountBalance,
-        maxDebit
+        maxDebit,
+        userBlocked,
     }
 })

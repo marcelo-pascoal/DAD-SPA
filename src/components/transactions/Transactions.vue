@@ -1,24 +1,35 @@
 <script setup>
-import { useToast } from "vue-toastification"
 import { useRouter } from 'vue-router'
-import { useTransactionsStore } from "../../stores/transactions.js"
-import { ref, computed, onMounted } from 'vue'
-import TransactionTable from "./TransactionTable.vue"
+import { ref, computed, onMounted, inject } from 'vue'
 
+const axios = inject('axios')
 const router = useRouter()
-const transactionsStore = useTransactionsStore()
 
 const filterByType = ref(null)
 const filterByPair = ref(null)
 const filterByMin = ref(null)
 const filterByMax = ref(null)
 
+const transactions = ref([]);
+const currentPage = ref(1);
+
 const loadTransactions = async () => {
   try {
-    await transactionsStore.loadTransactions()
-  } catch (error) {
-    console.log(error)
+    const response = await axios.get('transactions', {
+  params: {
+    page: currentPage.value
   }
+});
+
+    transactions.value = response
+    return transactions.value
+  } catch (error) {
+    clearTransactions();
+    throw error;
+  }
+}
+function clearTransactions() {
+  transactions.value = []
 }
 
 const addTransaction = () => {
@@ -29,16 +40,22 @@ const editTransaction = (transaction) => {
   router.push({ name: 'Transaction', params: { id: transaction.id } })
 }
 
-const filteredTransactions = computed(() =>
-  transactionsStore.getTransactionsByFilter(filterByType.value, filterByPair.value, filterByMin.value, filterByMax.value)
-)
+const goToPage = async (item) => {
+  currentPage.value = item;
+  await loadTransactions()
+}
 
-const totalTransactions = computed(() =>
-  transactionsStore.getTransactionsByFilterTotal(filterByType.value, filterByPair.value, filterByMin.value, filterByMax.value)
-)
-
-onMounted(() => {
+const backPage = () => {
+  currentPage.value--;
   loadTransactions()
+}
+
+const nextPage = async () => {
+  currentPage.value++;
+  await loadTransactions()
+}
+onMounted( async () => {
+  await loadTransactions()
 })
 
 </script>
@@ -48,33 +65,55 @@ onMounted(() => {
     <div class="mx-2">
       <h3 class="mt-4">Transactions</h3>
     </div>
-    <div class="mx-2 total-filtro">
-      <h5 class="mt-4">Total: {{ totalTransactions }}</h5>
-    </div>
   </div>
-  <hr>
   <div class="mb-3 d-flex justify-content-between flex-wrap">
-    <div class="mx-2 mt-2 flex-grow-1 filter-div">
-      <label for="selectType" class="form-label">Filter by type:</label>
-      <select class="form-select" id="selectType" v-model="filterByType">
-        <option :value="null"></option>
-        <option value="C">Credit</option>
-        <option value="D">Debit</option>
-      </select>
-    </div>
-    <div class="mx-2 mt-2 flex-grow-1 filter-div">
-      <label for="selectPair" class="form-label">Filter by Pair:</label>
-      <input type="text" class="form-control" id="selectPair"
-        v-model="filterByPair" placeholder="Enter vCard pair"/>
-    </div>
     <div class="mx-2 mt-2">
       <button type="button"  class="btn btn-success px-4 btn-addtr" @click="addTransaction">
         <i class="bi bi-xs bi-plus-circle"></i>&nbsp; Add Transaction
       </button>
     </div>
   </div>
-
-  <transaction-table :transactions="filteredTransactions" @edit="editTransaction"> </transaction-table>
+  <div v-if="transactions.data">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Value</th>
+        <th>Balance</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="transaction in transactions.data.data" :key="transaction.id">
+        <td>{{ transaction.id }}</td>
+        <td>{{ transaction.datetime }}</td>
+        <td>{{ transaction.type }}</td>
+        <td>{{ transaction.value }}</td>
+        <td>{{ transaction.new_balance }}</td>
+        <td class="text-end">
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-xs btn-light" @click="editTransaction(transaction)">
+              <i class="bi bi-xs bi-pencil"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button @click="backPage()" :disabled="currentPage==1">prev</button>
+  <button
+    v-for="item in transactions.data.meta.last_page"
+    :key="item"
+    @click="() => goToPage(item)"
+    :class="{ selected: item === currentPage }"
+    :disabled="item==currentPage"
+  >
+    {{ item }}
+  </button>
+  <button @click="nextPage()" :disabled="currentPage==transactions.data.meta.last_page">next</button>
+</div>
   
 </template>
 
@@ -87,5 +126,8 @@ onMounted(() => {
 }
 .btn-addtr {
   margin-top: 1.85rem;
+}
+.selected {
+  background-color: grey
 }
 </style>

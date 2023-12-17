@@ -1,6 +1,8 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import { useCategoriesStore } from "../../stores/categories.js"
 import { ref, computed, onMounted, inject } from 'vue'
+const categoriesStore = useCategoriesStore()
 
 const axios = inject('axios')
 const router = useRouter()
@@ -45,16 +47,22 @@ const goToPage = async (item) => {
   await loadTransactions()
 }
 
-const backPage = () => {
-  currentPage.value--;
-  loadTransactions()
+const backPage = async() => {
+  await loadTransactions(currentPage.value--)
 }
 
 const nextPage = async () => {
   currentPage.value++;
   await loadTransactions()
 }
+
+const getCategoryIcon = (categoryId) => {
+  const category = categoriesStore.categories.find(cat => cat.id === categoryId);
+  return category ? category.icon : '';
+};
+
 onMounted( async () => {
+  await categoriesStore.loadCategories()
   await loadTransactions()
 })
 
@@ -80,6 +88,7 @@ onMounted( async () => {
         <th>#</th>
         <th>Date</th>
         <th>Type</th>
+        <th>Category</th>
         <th>Value</th>
         <th>Balance</th>
         <th></th>
@@ -90,14 +99,16 @@ onMounted( async () => {
         <td>{{ transaction.id }}</td>
         <td>{{ transaction.datetime }}</td>
         <td>{{ transaction.type }}</td>
+        <td>
+          <button :class="'btn ' + (transaction.type==='D' ? 'btn-warning' : 'btn-success') + ' btn-xs'" >
+                    <i v-if="getCategoryIcon(transaction.category_id)" :class=getCategoryIcon(transaction.category_id) aria-hidden="true"></i>
+                    <i v-else class="empty" aria-hidden="true"></i></button></td>
         <td>{{ transaction.value }}</td>
         <td>{{ transaction.new_balance }}</td>
-        <td class="text-end">
-          <div class="d-flex justify-content-end">
+        <td> 
             <button class="btn btn-xs btn-light" @click="editTransaction(transaction)">
               <i class="bi bi-xs bi-pencil"></i>
             </button>
-          </div>
         </td>
       </tr>
     </tbody>
@@ -118,16 +129,31 @@ onMounted( async () => {
 </template>
 
 <style scoped>
+tr{ background-color:aliceblue; }
 .filter-div {
   min-width: 12rem;
 }
 .total-filtro {
   margin-top: 0.35rem;
 }
-.btn-addtr {
-  margin-top: 1.85rem;
-}
 .selected {
   background-color: grey
 }
+td,
+th {
+  border: 1px solid rgb(190, 190, 190);
+  padding: 10px;
+}
+
+th, td{
+  text-align: center;
+}
+
+
+.empty{
+  padding: 8px;
+  height: 8px;
+  filter: brightness(0.1);
+}
+
 </style>

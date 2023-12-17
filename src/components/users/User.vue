@@ -42,6 +42,7 @@ const errors = ref(null)
 const confirmationLeaveDialog = ref(null)
 const confirmationBtn = ref('')
 const msg= ref('')
+const vcardConfirmation = ref(false)
 const confirmedHandler = ref('')
 
 let originalValueStr = ''
@@ -165,6 +166,7 @@ const deleteAccount = () => {
     confirmedHandler.value='delete'
     confirmationBtn.value ='Delete account'
     msg.value='Do you really want to delete your account?'
+    vcardConfirmation.value=true
     confirmationLeaveDialog.value.show()
 }
 
@@ -177,6 +179,7 @@ onBeforeRouteLeave((to, from, next) => {
     confirmationBtn.value ='Discard changes and leave'
     msg.value='Do you really want to leave? You have unsaved changes!' 
     nextCallBack = next
+    vcardConfirmation.value=false
     confirmationLeaveDialog.value.show()
   } else {
     next()
@@ -196,6 +199,8 @@ onMounted(() =>{
     :confirmationBtn=confirmationBtn
     :msg=msg
     @confirmed="leaveConfirmed"
+    :showPassword=vcardConfirmation
+    :showCode=vcardConfirmation
   >
   </confirmation-dialog>
 

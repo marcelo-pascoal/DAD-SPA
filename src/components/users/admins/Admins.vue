@@ -96,6 +96,7 @@
     :showId="false"
     @edit="editUser"
     @delete="deleteUser"
+    
   ></admin-table>
 </template>
 

@@ -25,6 +25,10 @@ const clickMenuOption = () => {
     }
   }
 }
+
+const addTransaction = () => {
+    router.push({ name: 'NewTransaction' })
+}
 </script>
 
 <template>
@@ -35,8 +39,14 @@ const clickMenuOption = () => {
         vCard
       </router-link>
       <div class="balance" v-if="userStore.user?.user_type == 'V'">
-        <label for="accountBalance">Balance:</label>
+        <label for="accountBalance">Balance:&nbsp</label>
         <input type="text" style="text-align: right;" id="accountBalance" :value="'€ ' + userStore.accountBalance" readonly>
+      </div>
+      <div v-if="userStore.user">
+        &nbsp
+        <button type="button"  class="btn btn-success px-4 btn-addtr" @click="addTransaction">
+          <i class="bi bi-xs bi-plus-circle"></i>&nbsp; Add Transaction
+        </button>
       </div>
       <button id="buttonSidebarExpandId" class="navbar-toggler" type="button" data-bs-toggle="collapse"
         data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,15 +117,7 @@ const clickMenuOption = () => {
     <div class="row">
       <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
         <div class="position-sticky pt-3">
-          <ul class="nav flex-column" v-if="userStore.user">
-            <li class="nav-item">
-              <router-link class="nav-link" :class="{ active: $route.name === 'Dashboard' }"
-                          :to="{ name: 'Dashboard' }" @click="clickMenuOption">
-                <i class="bi bi-house"></i>
-                Dashboard
-              </router-link>
-            </li>
-            
+          <ul class="nav flex-column" v-if="userStore.user">            
             <li class="nav-item" v-show="userStore.user?.user_type == 'A'">
                 <router-link class="nav-link" :class="{ active: $route.name === 'Vcards' }"
                             :to="{ name: 'Vcards' }" @click="clickMenuOption">

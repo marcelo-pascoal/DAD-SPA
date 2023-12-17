@@ -34,7 +34,8 @@ onMounted(() => {
         <div class="d-flex align-items-center">
           <label for="maxDebit" class="mt-3"><h5>Maximum Debit&nbsp</h5></label>
           <input type="number" class="mt-2 form-control maxDebit" id="maxDebit" ref="maxDebit"
-                placeholder="Enter max Debit Value" v-model="editCard.max_debit">
+                placeholder="Enter max Debit Value" v-model="editCard.max_debit"
+                style="width: 150px;">
         </div>
       </div>
       <div class="submitBox">

@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from "../stores/user.js"
 import HomeView from '../views/HomeView.vue'
-import Dashboard from "../components/Dashboard.vue"
 import Login from "../components/auth/Login.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
 import ChangeConfirmationCode from "../components/auth/ChangeConfirmationCode.vue"
@@ -53,11 +52,6 @@ const router = createRouter({
       path: '/code',
       name: 'ChangeConfirmationCode',
       component: ChangeConfirmationCode
-    },
-    {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: Dashboard
     },
     {
       path: '/vcards',
@@ -141,11 +135,17 @@ router.beforeEach(async (to, from, next) => {
     next({ name: 'Login' })
     return
   }
-  if (to.name == 'Reports') {
-    if (userStore.user.type != 'A') {
+  if(to.name == 'Transactions' || to.name == 'ChangeConfirmationCode'){
+    if (userStore.user.user_type=='A'){
       next({ name: 'home' })
-      return
-    }
+    }else next()
+    return
+  }
+  if(to.name == 'Vcards' || to.name == 'NewUser'){
+    if (userStore.user.user_type=='V'){
+      next({ name: 'home' })
+    }else next()
+    return
   }
   if (to.name == 'User') {
     if (userStore.user.id == to.params.id) {

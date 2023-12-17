@@ -1,7 +1,6 @@
 <script setup>
 import { useToast } from "vue-toastification"
 import { useUserStore } from "../../stores/user.js"
-import { useTransactionsStore } from "../../stores/transactions.js"
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
 import { ref, watch, computed, inject, onMounted} from 'vue'
@@ -15,7 +14,6 @@ const axios = inject("axios")
 const toast = useToast()
 const router = useRouter()
 const userStore = useUserStore()
-const transactionsStore = useTransactionsStore()
 
 const newTransaction = () => { 
   return {
@@ -58,7 +56,12 @@ const save = async () => {
     try {
       
       transaction.value.type = userStore.userType == 'V' ? 'D' : 'C'
-      transaction.value = await transactionsStore.insertTransaction(transaction.value)
+      if(userStore.userType == 'V'){
+        transaction.value.vcard = userStore.userId
+      }
+      const response = await axios.post('transactions', transaction.value)
+      transaction.value = response.data.data
+      socket.emit('newTransaction', transaction.value)
       originalValueStr = JSON.stringify(transaction.value)
       toast.success('Transaction #' + transaction.value.id + ' was created successfully.')
       router.back()
@@ -75,7 +78,9 @@ const save = async () => {
     }
   } else {
     try {
-      transaction.value = await transactionsStore.updateTransaction(transaction.value)
+      const response = await axios.put('transactions/' + transaction.value.id, transaction.value)
+      transaction.value = response.data.data
+      socket.emit('updateTransaction', transaction.value)
       originalValueStr = JSON.stringify(transaction.value)
       toast.success('Transaction #' + transaction.value.id + ' was updated successfully.')
       router.back()
@@ -146,6 +151,8 @@ onMounted(() =>{
     ref="confirmationLeaveDialog"
     confirmationBtn="Discard changes and leave"
     msg="Do you really want to leave? You have unsaved changes!"
+    :showPassword="false"
+    :showCode="false"
     @confirmed="leaveConfirmed">
   </confirmation-dialog>
   <TransactionDetail :operationType="operation" :transaction="transaction"

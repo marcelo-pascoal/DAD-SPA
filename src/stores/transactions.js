@@ -112,7 +112,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
         getTransactionsByFilter,
         getTransactionsByFilterTotal,
         loadTransactions,
-	loadAllTransactions,
+	      loadAllTransactions,
         clearTransactions,
         insertTransaction,
         updateTransaction,

@@ -1,7 +1,7 @@
 <script setup>
 import { Bar, Line, Pie } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PieController, ArcElement, DoughnutController, LineController, LineElement, PointElement } from 'chart.js';
-import { useTransactionsStore } from "../../stores/transactions.js";
+import { useStatisticsStore } from "../../stores/statistics.js";
 import { useUserStore } from '../../stores/user.js';
 import { useCategoriesStore } from "../../stores/categories.js";
 import ChartsAdmin from './chartAdmin.vue';
@@ -22,7 +22,7 @@ ChartJS.register(
   PointElement
 );
 
-const transactionsStore = useTransactionsStore();
+const statisticsStore = useStatisticsStore();
 const userStore = useUserStore();
 const categoriesStore = useCategoriesStore();
 
@@ -50,62 +50,62 @@ async function loadChartData() {
     if (userStore.userType !== 'A') {
       const defaultFilters = {};
 
-      // Load transactions
-      await transactionsStore.loadTransactions(defaultFilters);
-      const totalTransactions = transactionsStore.transactions;
+      // Load statistics
+      await statisticsStore.loadStatistics(defaultFilters);
+      const totalStatistics = statisticsStore.statistics;
 
       // Load categories
       await categoriesStore.loadCategories();
       const allCategories = categoriesStore.categories;
 
-	  const transactionsPerCategory = allCategories.reduce((acc, category) => {
-		  const categoryTransactions = totalTransactions.filter(
-			(transaction) => transaction.category_id === category.id
+	  const statisticsPerCategory = allCategories.reduce((acc, category) => {
+		  const categoryStatistics = totalStatistics.filter(
+			(statistic) => statistic.category_id === category.id
 		  );
-		  acc[category.name] = categoryTransactions.length;
+		  acc[category.name] = categoryStatistics.length;
 		  return acc;
 	  }, {});
 
       chartDataCategories.value = {
-        labels: Object.keys(transactionsPerCategory),
+        labels: Object.keys(statisticsPerCategory),
         datasets: [{
           label: 'Transactions per Category',
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1,
-          data: Object.values(transactionsPerCategory),
+          data: Object.values(statisticsPerCategory),
         }],
       };
 
       // Load vCard pairs
-      const vCardPairs = [...new Set(totalTransactions.map(transaction => transaction.pair_vcard))];
+      const vCardPairs = [...new Set(totalStatistics.map(statistic => statistic.pair_vcard))];
 
-      const transactionsPerVCardPair = vCardPairs.reduce((acc, pair_vcard) => {
-        const pairTransactions = totalTransactions.filter(
-          (transaction) => transaction.pair_vcard === pair_vcard
+      const statisticsPerVCardPair = vCardPairs.reduce((acc, pair_vcard) => {
+        const pairStatistics = totalStatistics.filter(
+          (statistic) => statistic.pair_vcard === pair_vcard
         );
-        acc[pair_vcard || 'N/A'] = pairTransactions.length;
+        acc[pair_vcard || 'N/A'] = pairStatistics.length;
         return acc;
       }, {});
 
       chartDataVCardPairs.value = {
-        labels: Object.keys(transactionsPerVCardPair),
+        labels: Object.keys(statisticsPerVCardPair),
         datasets: [{
           label: 'Transactions per vCard Pair',
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1,
-          data: Object.values(transactionsPerVCardPair),
+          data: Object.values(statisticsPerVCardPair),
         }],
       };
 
-      const groupedByType = totalTransactions.reduce((acc, transaction) => {
-        const type = transaction.type;
+      const groupedByType = totalStatistics.reduce((acc, statistic) => {
+        const type = statistic.type;
         if (!acc[type]) {
           acc[type] = { count: 0, value: 0 };
         }
         acc[type].count++;
-        acc[type].value += parseFloat(transaction.value);
+        acc[type].value += parseFloat(statistic.value);
         return acc;
       }, {});
 
@@ -116,7 +116,7 @@ async function loadChartData() {
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1,
-          data: [totalTransactions.length],
+          data: [totalStatistics.length],
         }],
       };
 
@@ -124,12 +124,12 @@ async function loadChartData() {
       const filtersCredit = { type: 'C' };
       const filtersDebit = { type: 'D' };
 
-      // Load credit and debit transactions separately
-      await transactionsStore.loadTransactions(filtersCredit);
-      const creditTransactions = transactionsStore.transactions;
+      // Load credit and debit statistics separately
+      await statisticsStore.loadStatistics(filtersCredit);
+      const creditStatistics = statisticsStore.statistics;
 
-      await transactionsStore.loadTransactions(filtersDebit);
-      const debitTransactions = transactionsStore.transactions;
+      await statisticsStore.loadStatistics(filtersDebit);
+      const debitStatistics = statisticsStore.statistics;
 
       chartDataCredit.value = {
         labels: ['Credit Transactions'],
@@ -138,7 +138,7 @@ async function loadChartData() {
           backgroundColor: 'rgba(144, 238, 144, 0.2)',
           borderColor: 'rgba(144, 238, 144, 1)',
           borderWidth: 1,
-          data: [creditTransactions.length],
+          data: [creditStatistics.length],
         }],
       };
 
@@ -149,7 +149,7 @@ async function loadChartData() {
           backgroundColor: 'rgba(255, 255, 0, 0.2)',
           borderColor: 'rgba(255, 255, 0, 1)',
           borderWidth: 1,
-          data: [debitTransactions.length],
+          data: [debitStatistics.length],
         }],
       };
 
@@ -168,9 +168,9 @@ async function loadChartData() {
       };
 
     // Get dates and balances for the vCard over time
-	const vCardBalanceOverTime = totalTransactions.reduce((acc, transaction) => {
-	  const dateParts = transaction.datetime.split(/[- :]/);
-	  const transactionDate = new Date(
+	const vCardBalanceOverTime = totalStatistics.reduce((acc, statistic) => {
+	  const dateParts = statistic.datetime.split(/[- :]/);
+	  const statisticDate = new Date(
 		dateParts[0],
 		dateParts[1] - 1,
 		dateParts[2],
@@ -179,8 +179,8 @@ async function loadChartData() {
 		dateParts[5]
 	  );
 
-	  const date = transactionDate.toLocaleDateString();
-	  const balanceChange = parseFloat(transaction.value);
+	  const date = statisticDate.toLocaleDateString();
+	  const balanceChange = parseFloat(statistic.value);
 	  acc[date] = (acc[date] || 0) + balanceChange;
 	  return acc;
 	}, {});

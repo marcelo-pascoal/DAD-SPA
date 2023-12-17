@@ -2,7 +2,7 @@
 import { ref, onMounted, watchEffect , inject} from 'vue';
 import { Bar, Line, Pie } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PieController, LineController, LineElement, PointElement } from 'chart.js';
-import { useTransactionsStore } from '../../stores/transactions.js';
+import { useStatisticsStore } from '../../stores/statistics.js';
 
 const axios = inject("axios")
 
@@ -21,12 +21,12 @@ ChartJS.register(
 
 const loaded = ref(false);
 const chartDataVCardBalances = ref(null);
-const chartDataTransactions = ref(null);
+const chartDataStatistics = ref(null);
 const chartDataActiveVcards = ref(null);
-const chartDataTransactionTypes = ref(null);
+const chartDataStatisticTypes = ref(null);
 const chartDataPaymentTypes = ref(null);
-const chartDataTransactionDates = ref(null);
-const transactionsStore = useTransactionsStore();
+const chartDataStatisticDates = ref(null);
+const statisticStore = useStatisticsStore();
 
 watchEffect(() => {
   loadChartData();
@@ -76,21 +76,21 @@ async function loadChartData() {
       }],
     };
 
-    // Load transactions for all users (admin)
-    await transactionsStore.loadAllTransactions();
-    const transactions = transactionsStore.transactions;
+    // Load statistics for all users (admin)
+    await statisticStore.loadAllStatistics();
+    const statistics = statisticStore.statistics;
 
-	// Calculate the count of transactions per type
-	const transactionTypes = transactions.reduce((types, transaction) => {
-	  const type = transaction.type === 'C' ? 'Credit' : 'Debit';
+	// Calculate the count of statistics per type
+	const statisticTypes = statistics.reduce((types, statistic) => {
+	  const type = statistic.type === 'C' ? 'Credit' : 'Debit';
 	  types[type] = (types[type] || 0) + 1;
 	  return types;
 	}, {});
 
-	chartDataTransactionTypes.value = {
-	  labels: Object.keys(transactionTypes),
+	chartDataStatisticTypes.value = {
+	  labels: Object.keys(statisticTypes),
 	  datasets: [{
-		data: Object.values(transactionTypes),
+		data: Object.values(statisticTypes),
 		backgroundColor: [
 		  'rgba(255, 99, 132, 0.7)',
 		  'rgba(54, 162, 235, 0.7)',
@@ -103,9 +103,9 @@ async function loadChartData() {
 	  }],
 	};
 	
-	// Calculate the count of transactions per payment type
-    const paymentTypes = transactions.reduce((types, transaction) => {
-      const type = transaction.payment_type;
+	// Calculate the count of statistics per payment type
+    const paymentTypes = statistics.reduce((types, statistic) => {
+      const type = statistic.payment_type;
       types[type] = (types[type] || 0) + 1;
       return types;
     }, {});
@@ -134,18 +134,18 @@ async function loadChartData() {
       }],
     };
 	
-	// Calculate the count of transactions per date
-    const transactionDates = transactions.reduce((dates, transaction) => {
-      const date = transaction.datetime.split(' ')[0]; // Extract the date part
+	// Calculate the count of statistics per date
+    const statisticDates = statistics.reduce((dates, statistic) => {
+      const date = statistic.datetime.split(' ')[0]; // Extract the date part
       dates[date] = (dates[date] || 0) + 1;
       return dates;
     }, {});
 
-    chartDataTransactionDates.value = {
-      labels: Object.keys(transactionDates),
+    chartDataStatisticDates.value = {
+      labels: Object.keys(statisticDates),
       datasets: [{
-        label: 'Number of Transactions per Date',
-        data: Object.values(transactionDates),
+        label: 'Number of Statistics per Date',
+        data: Object.values(statisticDates),
         fill: false,
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 2,
@@ -164,8 +164,8 @@ async function loadChartData() {
   <div>
     <Bar v-if="loaded" :data="chartDataVCardBalances" />
 	<Bar v-if="loaded" :data="chartDataActiveVcards" />
-	<Pie v-if="loaded" :data="chartDataTransactionTypes" />
+	<Pie v-if="loaded" :data="chartDataStatisticTypes" />
 	<Pie v-if="loaded" :data="chartDataPaymentTypes" />
-	<Line v-if="loaded" :data="chartDataTransactionDates" />
+	<Line v-if="loaded" :data="chartDataStatisticDates" />
   </div>
 </template>

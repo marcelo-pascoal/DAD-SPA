@@ -61,7 +61,6 @@ const userTitle = computed(()=>{
 
 const save = () => {
   const userToSave = editingUser.value
-  console.log(userToSave)
   userToSave.deletePhotoOnServer = deletePhotoOnTheServer.value
   userToSave.base64ImagePhoto = editingImageAsBase64.value
   if(!props.inserting){

@@ -97,7 +97,6 @@ export const useUserStore = defineStore('user', () => {
     }
 
     async function changeConfirmationCode(credentials) {
-        console.log (userType.value)
         if (userType.value != 'V') {
             throw 'Only vCard can change the confirmation code!'
         }

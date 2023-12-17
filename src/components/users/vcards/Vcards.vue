@@ -20,7 +20,7 @@ const fetchCards = async () => {
 }
 
 const updateCard = async (vcard) => {
-  await axios.put(`/vcards/${vcard.phone_number}`, vcard)
+  await axios.put(`/update/vcards/${vcard.phone_number}`, vcard)
     toast.info(`vCard ${vcard.phone_number} was updated`)
     socket.emit('updatedVcard', vcard)
   fetchCards()

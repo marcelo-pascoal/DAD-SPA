@@ -130,6 +130,8 @@ router.beforeEach(async (to, from, next) => {
   if ((to.name == 'Login') || (to.name == 'home') || (to.name == 'NewUser')) {
     next()
     return
+  }else if(!userStore.user){
+    next({ name: 'home' });
   }
   if ((!userStore.user) && (!to.name == 'NewUser')) {
     next({ name: 'Login' })

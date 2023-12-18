@@ -162,20 +162,21 @@ async function loadChartData() {
 
 <template>
   <div class="container">
+    <h1 class="page-title">Statistics</h1>
     <div class="grid-container">
-      <div class="grid-item">
+      <div class="grid-item bordered-item">
         <Bar v-if="loaded" :data="chartDataVCardBalances" />
       </div>
-      <div class="grid-item">
+      <div class="grid-item bordered-item">
         <Bar v-if="loaded" :data="chartDataActiveVcards" />
       </div>
-      <div class="grid-item">
+      <div class="grid-item bordered-item">
         <Pie v-if="loaded" :data="chartDataStatisticTypes" />
       </div>
-      <div class="grid-item">
+      <div class="grid-item bordered-item">
         <Pie v-if="loaded" :data="chartDataPaymentTypes" />
       </div>
-      <div class="grid-item">
+      <div class="grid-item bordered-item">
         <Line v-if="loaded" :data="chartDataStatisticDates" />
       </div>
     </div>
@@ -193,6 +194,15 @@ async function loadChartData() {
 }
 
 .grid-item {
+}
+
+.bordered-item {
+  border: 1px solid #555;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .grid-item:nth-child(5) {

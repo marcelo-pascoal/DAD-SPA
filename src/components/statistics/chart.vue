@@ -216,25 +216,26 @@ async function loadChartData() {
 <template>
   <div class="container">
     <template v-if="userStore.userType === 'V'">
+	  <h1 class="page-title">Statistics</h1>
       <div class="grid-container">
-        <div class="grid-item">
+        <div class="grid-item bordered-item">
           <Bar v-if="loaded" :data="chartDataTotal" />
         </div>
-        <div class="grid-item">
+        <div class="grid-item bordered-item">
           <Bar v-if="loaded" :data="chartDataCredit" />
         </div>
-        <div class="grid-item">
+        <div class="grid-item bordered-item">
           <Pie v-if="loaded" :data="chartDataPie" />
         </div>
-        <div class="grid-item">
+        <div class="grid-item bordered-item">
 		  <div class="centered-content">
             <Bar v-if="loaded" :data="chartDataCategories" />
           </div>
 		</div>		
-        <div class="grid-item">
+        <div class="grid-item bordered-item">
           <Line v-if="loaded" :data="chartDataBalanceOverTime" />
         </div>
-        <div class="grid-item">
+        <div class="grid-item bordered-item">
           <Bar v-if="loaded" :data="chartDataVCardPairs" />
         </div>
       </div>
@@ -254,6 +255,15 @@ async function loadChartData() {
 }
 
 .grid-item {
+}
+
+.bordered-item {
+  border: 1px solid #555;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 

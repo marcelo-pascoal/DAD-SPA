@@ -142,14 +142,16 @@ const cleanPhoto = () => {
           <field-error-message :errors="errors" fieldName="email"></field-error-message>
         </div>
         <div class="d-flex">
-          <div class="mb-3 flex-grow-1" v-if="inserting">
+          <div class="mb-3 flex-grow-1" >
             <label for="inputPassword" class="form-label">Password</label>
             <input type="password" class="form-control" :class="{ 'is-invalid': errors ? errors['password'] : false }"
                 id="inputPassword" v-model="editingUser.password"/>
             <field-error-message :errors="errors" fieldName="password"></field-error-message>
-            <label for="inputPasswordConfirmation" class="form-label">Password Confirmation</label>
+            <div v-if="inserting">
+              <label for="inputPasswordConfirmation" class="form-label">Password Confirmation</label>
             <input type="password" class="form-control" id="inputPasswordConfirmation" v-model="editingUser.password_confirmation"/>
             <field-error-message :errors="errors" fieldName="password_confirmation"></field-error-message>
+          </div>
           </div>
           <div class="mb-3 flex-grow-1" v-if="inserting && props.type=='vcard'">
             <label for="inputConfirmationCode" class="form-label">Secret Code</label>

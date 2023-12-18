@@ -4,7 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css"
 import "bootstrap"
 
 import axios from 'axios'
-import { createApp} from 'vue'
+import { createApp, ref,} from 'vue'
 import { createPinia } from 'pinia'
 import { io } from "socket.io-client"
 import Toast from "vue-toastification"

@@ -7,12 +7,9 @@
   const toast = useToast()
   const router = useRouter()
   const socket = inject('socket')
-  
   const axios = inject("axios")
-
   const userToDelete = ref(null)
   const deleteConfirmationDialog = ref(null)
-
   const users = ref([])
 
   const totalUsers = computed(() => {

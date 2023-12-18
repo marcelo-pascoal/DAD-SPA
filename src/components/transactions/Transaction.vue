@@ -6,11 +6,8 @@ import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { ref, watch, computed, inject, onMounted} from 'vue'
 import TransactionDetail from "./TransactionDetail.vue"
 
-
 const socket = inject("socket")
-
 const axios = inject("axios")
-
 const toast = useToast()
 const router = useRouter()
 const userStore = useUserStore()

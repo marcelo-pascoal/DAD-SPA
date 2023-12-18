@@ -5,9 +5,7 @@ import { ref, inject, onMounted } from 'vue'
 
 const axios = inject("axios")
 const socket = inject("socket")
-
 const toast = useToast()
-
 const vcards = ref([])
 
 const fetchCards = async () => {
@@ -42,6 +40,7 @@ socket.on('updatedVcard', () => {
     fetchCards()
 })
 socket.on('insertedVcard', (insertedVcard) => {
+    toast.info("vCard list has been altered")
     fetchCards()
 })
 

@@ -7,7 +7,6 @@ import { ref } from 'vue'
 const toast = useToast()
 const router = useRouter()
 const userStore = useUserStore()
-
 const passwords = ref({
   current_password: '',
   confirmation_code: '',

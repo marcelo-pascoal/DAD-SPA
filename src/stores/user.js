@@ -5,25 +5,20 @@ import { useToast } from "vue-toastification"
 import { useRouter, useRoute} from 'vue-router'
 
 export const useUserStore = defineStore('user', () => {
+
     const axios = inject("axios")
     const socket = inject("socket")
     const toast = useToast()
-
     const router = useRouter()
     const route = useRoute()
     const serverBaseUrl = inject('serverBaseUrl')
-
     const user = ref(null)
-
     const accountBalance = ref(0)
     const maxDebit = ref(0)
-
     const userBlocked = ref(0)
    
     const userName = computed(() => user.value?.name ?? 'Anonymous')
-
     const userId = computed(() => user.value?.id ?? -1)
-
     const userType = computed(() => user.value?.user_type ?? 'V')
 
     const userPhotoUrl = computed(() => 
@@ -145,7 +140,7 @@ export const useUserStore = defineStore('user', () => {
                 
             }
             else{
-            toast.info('Your profile has been altered!')
+                toast.info('Your profile has been altered!')
             }
         } 
         else {
@@ -160,6 +155,11 @@ export const useUserStore = defineStore('user', () => {
 
     socket.on('accountCredited', (transaction) => {
         toast.success(`You account has been credited (#${transaction.payment_type} (${transaction.payment_reference}): ${transaction.value})`)
+        getFinantialInfo()
+    })
+
+    socket.on('accountDebited', (transaction) => {
+        toast.warning(`You account has been debited (#${transaction.payment_type} (${transaction.payment_reference}): ${transaction.value})`)
         getFinantialInfo()
     })
 

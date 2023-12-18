@@ -134,7 +134,7 @@ async function loadChartData() {
       }],
     };
 	
-	// Calculate the count of statistics per date
+	// Calculate the count of transactions per date
     const statisticDates = statistics.reduce((dates, statistic) => {
       const date = statistic.datetime.split(' ')[0]; // Extract the date part
       dates[date] = (dates[date] || 0) + 1;
@@ -144,7 +144,7 @@ async function loadChartData() {
     chartDataStatisticDates.value = {
       labels: Object.keys(statisticDates),
       datasets: [{
-        label: 'Number of Statistics per Date',
+        label: 'Number of Transactions per Date (Current Month)',
         data: Object.values(statisticDates),
         fill: false,
         borderColor: 'rgba(255, 99, 132, 1)',
@@ -161,11 +161,52 @@ async function loadChartData() {
 </script>
 
 <template>
-  <div>
-    <Bar v-if="loaded" :data="chartDataVCardBalances" />
-	<Bar v-if="loaded" :data="chartDataActiveVcards" />
-	<Pie v-if="loaded" :data="chartDataStatisticTypes" />
-	<Pie v-if="loaded" :data="chartDataPaymentTypes" />
-	<Line v-if="loaded" :data="chartDataStatisticDates" />
+  <div class="container">
+    <h1 class="page-title">Admin Statistics for the Current Month</h1>
+    <div class="grid-container">
+      <div class="grid-item bordered-item">
+        <Bar v-if="loaded" :data="chartDataVCardBalances" />
+      </div>
+      <div class="grid-item bordered-item">
+        <Bar v-if="loaded" :data="chartDataActiveVcards" />
+      </div>
+      <div class="grid-item bordered-item">
+        <Pie v-if="loaded" :data="chartDataStatisticTypes" />
+      </div>
+      <div class="grid-item bordered-item">
+        <Pie v-if="loaded" :data="chartDataPaymentTypes" />
+      </div>
+      <div class="grid-item bordered-item">
+        <Line v-if="loaded" :data="chartDataStatisticDates" />
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.container {
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.grid-item {
+}
+
+.bordered-item {
+  border: 1px solid #555;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.grid-item:nth-child(5) {
+  grid-column: span 2;
+  text-align: center;
+}
+</style>

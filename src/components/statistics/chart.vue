@@ -216,14 +216,69 @@ async function loadChartData() {
 <template>
   <div class="container">
     <template v-if="userStore.userType === 'V'">
-      <Bar v-if="loaded" :data="chartDataTotal" />
-      <Bar v-if="loaded" :data="chartDataCredit" />
-      <Bar v-if="loaded" :data="chartDataDebit" />
-      <Pie v-if="loaded" :data="chartDataPie" />
-      <Line v-if="loaded" :data="chartDataBalanceOverTime" />
-	  <Bar v-if="loaded" :data="chartDataCategories" />
-	  <Bar v-if="loaded" :data="chartDataVCardPairs" />
+	  <h1 class="page-title">Statistics</h1>
+      <div class="grid-container">
+        <div class="grid-item bordered-item">
+          <Bar v-if="loaded" :data="chartDataTotal" />
+        </div>
+        <div class="grid-item bordered-item">
+          <Bar v-if="loaded" :data="chartDataCredit" />
+        </div>
+        <div class="grid-item bordered-item">
+          <Pie v-if="loaded" :data="chartDataPie" />
+        </div>
+        <div class="grid-item bordered-item">
+		  <div class="centered-content">
+            <Bar v-if="loaded" :data="chartDataCategories" />
+          </div>
+		</div>		
+        <div class="grid-item bordered-item">
+          <Line v-if="loaded" :data="chartDataBalanceOverTime" />
+        </div>
+        <div class="grid-item bordered-item">
+          <Bar v-if="loaded" :data="chartDataVCardPairs" />
+        </div>
+      </div>
     </template>
-	<ChartsAdmin v-else />
+    <ChartsAdmin v-else />
   </div>
 </template>
+
+<style scoped>
+.container {
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.grid-item {
+}
+
+.bordered-item {
+  border: 1px solid #555;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.grid-item:nth-child(5),
+.grid-item:nth-child(6) {
+  grid-column: span 2;
+  text-align: center;
+}
+</style>
+
+

@@ -1,27 +1,56 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useCategoriesStore } from "../../stores/categories.js"
-import { ref, computed, onMounted, inject } from 'vue'
+import { ref, watch, computed, onMounted, inject } from 'vue'
 const categoriesStore = useCategoriesStore()
 
 const axios = inject('axios')
 const router = useRouter()
 
 const filterByType = ref(null)
-const filterByPair = ref(null)
-const filterByMin = ref(null)
-const filterByMax = ref(null)
+const filterByPairVcard = ref('')
+const filterByMin = ref('')
+const filterByMax = ref('')
+const filterByCategory = ref(null)
 
+const filteredCategories = computed(() => {
+      if (filterByType.value !== null) {
+        return categoriesStore.categories.filter(category => category.type === filterByType.value);
+      } else {
+        return categoriesStore.categories;
+      }
+    });
+    
+watch([filterByType, filterByPairVcard, filterByMin, filterByMax, filterByCategory], () => {
+  // Call the load method when any of the ref values changes
+  currentPage.value=1;
+  loadTransactions();
+});
 const transactions = ref([]);
 const currentPage = ref(1);
 
 const loadTransactions = async () => {
   try {
-    const response = await axios.get('transactions', {
-  params: {
-    page: currentPage.value
-  }
-});
+		const params = {};
+		if (filterByType.value !== null) {
+		  params.type = filterByType.value;
+		}
+		if (filterByPairVcard.value !== '') {
+		  params.pair_vcard = filterByPairVcard.value;
+		}
+		if (filterByMin.value !== '') {
+		  params.min = filterByMin.value;
+		}
+		if (filterByMax.value !== '') {
+		  params.max = filterByMax.value;
+		}
+		if (filterByCategory.value !== null) {
+		  params.category_id = filterByCategory.value;
+		}
+    params.page = currentPage.value
+		const response = await axios.get('transactions', {
+		  params,
+		});
 
     transactions.value = response
     return transactions.value
@@ -74,13 +103,46 @@ onMounted( async () => {
       <h3 class="mt-4">Transactions</h3>
     </div>
   </div>
-  <div class="mb-3 d-flex justify-content-between flex-wrap">
-    <div class="mx-2 mt-2">
-      <button type="button"  class="btn btn-success px-4 btn-addtr" @click="addTransaction">
-        <i class="bi bi-xs bi-plus-circle"></i>&nbsp; Add Transaction
-      </button>
+  <div class="mb-3 d-flex justify-content-between align-items-end  flex-wrap">
+    <div class="mx-1 mt-1">
+      <label for="3">Type:</label>
+      <select id="3" class="form-select pe-5" v-model="filterByType">
+        <option :value="null">-- No Type --</option>
+        <option value="D">Debit</option>
+        <option value="C">Credit</option>
+      </select>
+    </div>
+    <div class="mx-1 mt-1">
+      <label for="inputVcard" class="form-label">Pair vCard</label>
+      <input type="number" class="form-control"
+        id="inputVcard" required
+        v-model="filterByPairVcard">
+    </div>
+    <div class="mx-1 mt-1">
+      <label for="inputVcard" class="form-label">Min Value </label>
+      <input type="number" class="form-control"
+        id="inputVcard" required
+        v-model="filterByMin">
+    </div>
+    <div class="mx-1 mt-1">
+      <label for="inputVcard" class="form-label">Max Value </label>
+      <input type="number" class="form-control"
+        id="inputVcard" required
+        v-model="filterByMax">
+    </div>
+    <div class="mx-1 mt-1">
+      <label for="inputCategory" class="form-label">Category</label>
+      <select class="form-select pe-5  "
+        id="inputCategory" v-model="filterByCategory">
+        <option :value="null">-- No Category --</option>
+        <option v-if="filterByType"
+          v-for="category in filteredCategories"
+          :key="category.id" :value="category.id">{{category.name}}
+        </option>
+      </select>
     </div>
   </div>
+  
   <div v-if="transactions.data">
   <table class="table">
     <thead>

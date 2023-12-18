@@ -75,14 +75,10 @@ onMounted(async () => {
   </confirmation-dialog>
 
   <div class="container">
-    <h3 class="mt-5 mb-3">Categories</h3>
-    <hr>
+    <h5 class="mt-3">New Categry</h5>
     <NewCategory></NewCategory>
-    <div class="d-flex">
-      <div class="flex-grow-1">
-        <h5 class="mt-3">Category List</h5>
-      </div>
-    </div>
+    <hr>
+    <h5 class="mt-3">Categories</h5>
     <div class="d-flex flex-wrap justify-content-between">
       <div class="mb-3 me-3 flex-grow-1">
         <label for="selectName" class="form-label" >Filter by name:</label>

@@ -98,11 +98,7 @@ onMounted( async () => {
 </script>
 
 <template>
-  <div class="d-flex justify-content-between">
-    <div class="mx-2">
-      <h3 class="mt-4">Transactions</h3>
-    </div>
-  </div>
+  <h5 class="mt-3">Transactions</h5>
   <div class="mb-3 d-flex justify-content-between align-items-end  flex-wrap">
     <div class="mx-1 mt-1">
       <label for="3">Type:</label>
@@ -192,26 +188,18 @@ onMounted( async () => {
 
 <style scoped>
 tr{ background-color:aliceblue; }
-.filter-div {
-  min-width: 12rem;
-}
-.total-filtro {
-  margin-top: 0.35rem;
-}
 .selected {
   background-color: grey
 }
 td,
 th {
   border: 1px solid rgb(190, 190, 190);
-  padding: 10px;
+  padding: 5px;
 }
 
 th, td{
   text-align: center;
 }
-
-
 .empty{
   padding: 8px;
   height: 8px;

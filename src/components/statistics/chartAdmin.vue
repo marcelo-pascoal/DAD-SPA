@@ -162,7 +162,7 @@ async function loadChartData() {
 
 <template>
   <div class="container">
-    <h1 class="page-title">Statistics</h1>
+    <h1 class="page-title">Admin Statistics for the Current Month</h1>
     <div class="grid-container">
       <div class="grid-item bordered-item">
         <Bar v-if="loaded" :data="chartDataVCardBalances" />
